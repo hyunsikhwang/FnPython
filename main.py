@@ -260,6 +260,9 @@ def process_cmds(msg):
     if CMD_HELP == text:
         cmd_help(chat_id)
         return
+    if CMD_NONE == text:
+        cmd_none(chat_id)
+        return
     if CMD_INFORM == text:
         cmd_inform(chat_id)
         return
