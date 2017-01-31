@@ -22,6 +22,8 @@ import re
 from urllib import urlencode, quote_plus
 from urllib2 import Request, urlopen
 
+from bs4 import BeautifulSoup
+
 # 봇 토큰, 봇 API 주소
 TOKEN = '303352490:AAGLVFQbnFyviIelWVBynx98JGqd_GoVRzQ'
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
