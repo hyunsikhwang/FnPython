@@ -54,6 +54,7 @@ CUSTOM_KEYBOARD = [
         [CMD_INFORM],
         ]
 
+ST_ECHO, ST_INFORM = range(2)
 
 def FindCodeAPI(APIKey, stock_name):
     url = 'http://api.seibro.or.kr/openapi/service/StockSvc/getStkIsinByNm'
@@ -110,6 +111,15 @@ def get_enabled_chats():
     """
     query = EnableStatus.query(EnableStatus.enabled == True)
     return query.fetch()
+
+def set_status(chat_id, cmd_status):
+    u"""set_status: 명령어 상태
+    chat_id:    (integer) 채팅 ID
+    cmd_status: (integer) 명령어 상태(inform)
+    """
+    cs = CommandStatus.get_or_insert(str(chat_id))
+    cs.command_status = cmd_status
+    cs.put()
 
 # 메시지 발송 관련 함수들
 def send_msg(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
@@ -169,6 +179,20 @@ def cmd_help(chat_id):
     """
     send_msg(chat_id, USAGE, keyboard=CUSTOM_KEYBOARD)
 
+def cmd_inform(chat_id):
+    u"""cmd_inform: 종목 정보 조회
+    chat_id: (integer) 채팅 ID
+    """
+    set_status(chat_id, ST_INFORM)
+    send_msg(chat_id, u'조회할 종목 이름을 입력하세요.')
+
+def cmd_none(chat_id):
+    u"""cmd_none: 종목 조회 모드 종료
+    chat_id: (integer) 채팅 ID
+    """
+    set_status(chat_id, ST_ECHO)
+    send_msg(chat_id, u'종목 조회가 종료되었습니다.', keyboard=CUSTOM_KEYBOARD)
+
 def cmd_broadcast(chat_id, text):
     u"""cmd_broadcast: 봇이 활성화된 모든 채팅에 메시지 방송
     chat_id: (integer) 채팅 ID
@@ -205,6 +229,27 @@ def process_cmds(msg):
         return
     if CMD_HELP == text:
         cmd_help(chat_id)
+        return
+    if CMD_INFORM == text:
+        cmd_inform(chat_id)
+        return
+    if get_status(chat_id) == ST_INFORM:
+        result_list = FindCodeAPI(APIKey, text)
+        if not result_list[0]:
+            send_msg(chat_id, u'종목명을 검색할 수 없습니다. 다시 확인 후 입력해주세요.')
+        elif len(result_list[0]) == 1 and result_list[0][0][0] == text:
+            send_msg(chat_id, result_list[0][0][0] + u' 종목이 존재합니다.', keyboard=CUSTOM_KEYBOARD)
+        else:
+            count = 0
+            for li in result_list[0]:
+                if li[0] == text:
+                    send_msg(chat_id, u'동일한 종목이 발견되었습니다.')
+                    send_msg(chat_id, text + u' 종목이 존재합니다.', keyboard=CUSTOM_KEYBOARD)
+                    return
+                count += 1
+            merge_list = MergeList(result_list[0])
+            result_list[0].append([CMD_NONE])
+            cmd_addquote(chat_id, merge_list, result_list[0])
         return
     cmd_broadcast_match = re.match('^' + CMD_BROADCAST + ' (.*)', text)
     if cmd_broadcast_match:
