@@ -27,12 +27,14 @@ CMD_START     = '/start'
 CMD_STOP      = '/stop'
 CMD_HELP      = '/help'
 CMD_BROADCAST = '/broadcast'
+CMD_INFORM    = '/inform'
 
 # 봇 사용법 & 메시지
 USAGE = u"""[사용법] 아래 명령어를 메시지로 보내거나 버튼을 누르시면 됩니다.
 /start - (로봇 활성화)
 /stop  - (로봇 비활성화)
 /help  - (이 도움말 보여주기)
+/inform - (정보 조회)
 """
 MSG_START = u'봇을 시작합니다.'
 MSG_STOP  = u'봇을 정지합니다.'
@@ -103,7 +105,7 @@ def send_msg(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
         params['reply_markup'] = reply_markup
     try:
         urllib2.urlopen(BASE_URL + 'sendMessage', urllib.urlencode(params)).read()
-    except Exception as e: 
+    except Exception as e:
         logging.exception(e)
 
 def broadcast(text):
