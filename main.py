@@ -4,7 +4,7 @@
 # modified by: Bak Yeon O @ http://bakyeono.net
 # description: http://bakyeono.net/post/2015-08-24-using-telegram-bot-api.html
 # github:      https://github.com/bakyeono/using-telegram-bot-api
-#
+# githun:      https://github.com/hyunsikhwang/FnPython
 
 # 구글 앱 엔진 라이브러리 로드
 from google.appengine.api import urlfetch
@@ -18,9 +18,16 @@ import json
 import logging
 import re
 
+# 종목명 찾기 API 관련 라이브러리 로드
+from urllib import urlencode, quote_plus
+from urllib2 import Request, urlopen
+
 # 봇 토큰, 봇 API 주소
 TOKEN = '303352490:AAGLVFQbnFyviIelWVBynx98JGqd_GoVRzQ'
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
+
+# 종목명 찾기 API Key
+APIKey = "CJL9jdtz5gsb4z4PpjFpCDjdz/UIk8cFAGgHbJvgLEJxPWLZaTx3wIcBNPkGu/KIKsI1zAy1XtfQJLG0VV0vVg=="
 
 # 봇이 응답할 명령어
 CMD_START     = '/start'
@@ -44,7 +51,33 @@ CUSTOM_KEYBOARD = [
         [CMD_START],
         [CMD_STOP],
         [CMD_HELP],
+        [CMD_INFORM],
         ]
+
+
+def FindCodeAPI(APIKey, stock_name):
+    url = 'http://api.seibro.or.kr/openapi/service/StockSvc/getStkIsinByNm'
+    queryParams = '?' + urlencode({ quote_plus('ServiceKey') : APIKey, quote_plus('secnNm') : stock_name.encode('utf-8'), quote_plus('pageNo') : '1', quote_plus(u'numOfRows') : '50' })
+
+    request = Request(url + queryParams)
+    request.get_method = lambda: 'GET'
+    page = urlopen(request).read()
+
+    soup = BeautifulSoup(page, 'html.parser', from_encoding='utf-8')
+
+    i = 0
+    retlist = []
+    retlist1 = []
+    retlist2 = []
+
+    for li in soup.findAll('item'):
+        i = i + 1
+        retlist1.append([li.korsecnnm.string])
+        retlist2.append([li.shotnisin.string])
+
+    retlist = [retlist1, retlist2]
+    return retlist
+
 
 # 채팅별 로봇 활성화 상태
 # 구글 앱 엔진의 Datastore(NDB)에 상태를 저장하고 읽음
