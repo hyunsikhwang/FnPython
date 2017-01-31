@@ -105,6 +105,15 @@ def get_enabled(chat_id):
         return es.enabled
     return False
 
+def get_status(chat_id):
+    u"""get_status: 사용 상태 반환
+    return: (boolean)
+    """
+    cs = CommandStatus.get_by_id(str(chat_id))
+    if cs:
+        return cs.command_status
+    return False
+
 def get_enabled_chats():
     u"""get_enabled: 봇이 활성화된 채팅 리스트 반환
     return: (list of EnableStatus)
