@@ -37,6 +37,7 @@ CMD_STOP      = '/stop'
 CMD_HELP      = '/help'
 CMD_BROADCAST = '/broadcast'
 CMD_INFORM    = '/inform'
+CMD_NONE      = '/none'
 
 # 봇 사용법 & 메시지
 USAGE = u"""[사용법] 아래 명령어를 메시지로 보내거나 버튼을 누르시면 됩니다.
@@ -55,6 +56,8 @@ CUSTOM_KEYBOARD = [
         [CMD_HELP],
         [CMD_INFORM],
         ]
+
+USER_KEYBOARD = []
 
 ST_ECHO, ST_INFORM = range(2)
 
@@ -84,6 +87,12 @@ def FindCodeAPI(APIKey, stock_name):
     retlist = [retlist1, retlist2]
     return retlist
 
+def MergeList(reflist):
+    ml = ""
+    for il in reflist:
+        ml += il[0] + "\n"
+
+    return ml
 
 # 채팅별 로봇 활성화 상태
 # 구글 앱 엔진의 Datastore(NDB)에 상태를 저장하고 읽음
@@ -199,6 +208,13 @@ def cmd_inform(chat_id):
     """
     set_status(chat_id, ST_INFORM)
     send_msg(chat_id, u'조회할 종목 이름을 입력하세요.')
+
+def cmd_addquote(chat_id, text, result_list):
+    u"""cmd_addquote: 종목 추가
+    chat_id: (integer) 채팅 ID
+    """
+    USER_KEYBOARD = result_list
+    send_msg(chat_id, u'종목을 선택해주십시오.\n선택 작업 종료는 /none 을 선택해주세요.', keyboard=USER_KEYBOARD)
 
 def cmd_none(chat_id):
     u"""cmd_none: 종목 조회 모드 종료
