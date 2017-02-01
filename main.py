@@ -37,7 +37,7 @@ CMD_STOP      = '/stop'
 CMD_HELP      = '/help'
 CMD_BROADCAST = '/broadcast'
 CMD_INFORM    = '/inform'
-CMD_NONE      = '/none'
+CMD_CLOSE     = '/close'
 
 # 봇 사용법 & 메시지
 USAGE = u"""[사용법] 아래 명령어를 메시지로 보내거나 버튼을 누르시면 됩니다.
@@ -214,10 +214,10 @@ def cmd_addquote(chat_id, text, result_list):
     chat_id: (integer) 채팅 ID
     """
     USER_KEYBOARD = result_list
-    send_msg(chat_id, u'종목을 선택해주십시오.\n선택 작업 종료는 /none 을 선택해주세요.', keyboard=USER_KEYBOARD)
+    send_msg(chat_id, u'종목을 선택해주십시오.\n선택 작업 종료는 /close 을 선택해주세요.', keyboard=USER_KEYBOARD)
 
-def cmd_none(chat_id):
-    u"""cmd_none: 종목 조회 모드 종료
+def cmd_close(chat_id):
+    u"""cmd_close: 종목 조회 모드 종료
     chat_id: (integer) 채팅 ID
     """
     set_status(chat_id, ST_ECHO)
@@ -260,8 +260,8 @@ def process_cmds(msg):
     if CMD_HELP == text:
         cmd_help(chat_id)
         return
-    if CMD_NONE == text:
-        cmd_none(chat_id)
+    if CMD_CLOSE == text:
+        cmd_close(chat_id)
         return
     if CMD_INFORM == text:
         cmd_inform(chat_id)
@@ -271,17 +271,17 @@ def process_cmds(msg):
         if not result_list[0]:
             send_msg(chat_id, u'종목명을 검색할 수 없습니다. 다시 확인 후 입력해주세요.')
         elif len(result_list[0]) == 1 and result_list[0][0][0] == text:
-            send_msg(chat_id, result_list[0][0][0] + u' 종목이 존재합니다.', keyboard=CUSTOM_KEYBOARD)
+            send_msg(chat_id, result_list[0][0][0] + u' 종목(' + result_list[1][count][0] + u')이 존재합니다.', keyboard=CUSTOM_KEYBOARD)
         else:
             count = 0
             for li in result_list[0]:
                 if li[0] == text:
                     send_msg(chat_id, u'동일한 종목이 발견되었습니다.')
-                    send_msg(chat_id, text + u' 종목이 존재합니다.', keyboard=CUSTOM_KEYBOARD)
+                    send_msg(chat_id, text + u' 종목(' + result_list[1][count][0] + u')이 존재합니다.', keyboard=CUSTOM_KEYBOARD)
                     return
                 count += 1
             merge_list = MergeList(result_list[0])
-            result_list[0].append([CMD_NONE])
+            result_list[0].append([CMD_CLOSE])
             cmd_addquote(chat_id, merge_list, result_list[0])
         return
     cmd_broadcast_match = re.match('^' + CMD_BROADCAST + ' (.*)', text)
