@@ -36,7 +36,7 @@ CMD_START     = '/start'
 CMD_STOP      = '/stop'
 CMD_HELP      = '/help'
 CMD_BROADCAST = '/broadcast'
-CMD_INFORM    = '/inform'
+CMD_INFO      = '/info'
 CMD_CLOSE     = '/close'
 
 # 봇 사용법 & 메시지
@@ -44,7 +44,7 @@ USAGE = u"""[사용법] 아래 명령어를 메시지로 보내거나 버튼을 
 /start - (로봇 활성화)
 /stop  - (로봇 비활성화)
 /help  - (이 도움말 보여주기)
-/inform - (정보 조회)
+/info  - (정보 조회)
 """
 MSG_START = u'봇을 시작합니다.'
 MSG_STOP  = u'봇을 정지합니다.'
@@ -54,12 +54,12 @@ CUSTOM_KEYBOARD = [
         [CMD_START],
         [CMD_STOP],
         [CMD_HELP],
-        [CMD_INFORM],
+        [CMD_INFO],
         ]
 
 USER_KEYBOARD = []
 
-ST_ECHO, ST_INFORM = range(2)
+ST_ECHO, ST_INFO = range(2)
 
 class CommandStatus(ndb.Model):
     command_status = ndb.IntegerProperty(required=True, indexed=True, default=False,)
@@ -138,7 +138,7 @@ def get_enabled_chats():
 def set_status(chat_id, cmd_status):
     u"""set_status: 명령어 상태
     chat_id:    (integer) 채팅 ID
-    cmd_status: (integer) 명령어 상태(inform)
+    cmd_status: (integer) 명령어 상태(info)
     """
     cs = CommandStatus.get_or_insert(str(chat_id))
     cs.command_status = cmd_status
@@ -202,11 +202,11 @@ def cmd_help(chat_id):
     """
     send_msg(chat_id, USAGE, keyboard=CUSTOM_KEYBOARD)
 
-def cmd_inform(chat_id):
-    u"""cmd_inform: 종목 정보 조회
+def cmd_info(chat_id):
+    u"""cmd_info: 종목 정보 조회
     chat_id: (integer) 채팅 ID
     """
-    set_status(chat_id, ST_INFORM)
+    set_status(chat_id, ST_INFO)
     send_msg(chat_id, u'조회할 종목 이름을 입력하세요.')
 
 def cmd_addquote(chat_id, text, result_list):
@@ -263,10 +263,10 @@ def process_cmds(msg):
     if CMD_CLOSE == text:
         cmd_close(chat_id)
         return
-    if CMD_INFORM == text:
-        cmd_inform(chat_id)
+    if CMD_INFO == text:
+        cmd_info(chat_id)
         return
-    if get_status(chat_id) == ST_INFORM:
+    if get_status(chat_id) == ST_INFO:
         result_list = FindCodeAPI(APIKey, text)
         if not result_list[0]:
             send_msg(chat_id, u'종목명을 검색할 수 없습니다. 다시 확인 후 입력해주세요.')
