@@ -82,9 +82,10 @@ def FindCodeAPI(APIKey, stock_name):
     for li in soup.findAll('item'):
         i = i + 1
         retlist1.append([li.korsecnnm.string])
-        if li.shotnisin.string == None:
-            li.shotnisin.string = ''
-        retlist2.append([li.shotnisin.string])
+        if li.shotnisin == None:
+            retlist2.append(['000000'])
+        else:
+            retlist2.append([li.shotnisin.string])
 
     retlist = [retlist1, retlist2]
     return retlist
