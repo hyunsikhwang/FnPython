@@ -40,13 +40,13 @@ for elem in srch(temp):
     if len(srch(temp)[i]) == 7:
         retlist1.append(srch(temp)[i][4].text)
         retlist2.append(srch(temp)[i][6].text)
-        print retlist1[count], retlist2[count]
+        #print retlist1[count], retlist2[count]
         count = count + 1
     i = i + 1
 
 #----------------------------------------------------------------------------------------
 stop1 = timeit.default_timer()
-print stop1 - start
+print "lxml : ", stop1 - start
 
 soup = BeautifulSoup(xml, 'html.parser', from_encoding='utf-8')
 
@@ -62,4 +62,4 @@ for li in soup.findAll('item'):
 
 
 stop2 = timeit.default_timer()
-print stop2 - stop1
+print "BeautifulSoup :", stop2 - stop1
