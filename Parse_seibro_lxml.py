@@ -18,7 +18,7 @@ f.close()
 context = etree.fromstring(xml.encode('utf-8'))
 #r = context.xpath('//item/korSecnNm/text()')
 i = 0
-#temp = etree.XML(xml.encode('utf-8'))
+temp = etree.XML(xml.encode('utf-8'))
 
 retlist = []
 retlist1 = []
@@ -33,7 +33,7 @@ r = context.xpath('//item/korSecnNm/text()')
 i = 0
 count = 0
 
-for elem in r:
+for elem in srch(temp):
     #print "Number: ", i
     #print "Item count:", len(srch(temp)[i])
 
