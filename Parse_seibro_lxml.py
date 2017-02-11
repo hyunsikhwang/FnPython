@@ -43,3 +43,23 @@ for elem in srch(temp):
         print retlist1[count], retlist2[count]
         count = count + 1
     i = i + 1
+
+#----------------------------------------------------------------------------------------
+stop1 = timeit.default_timer()
+print stop1 - start
+
+soup = BeautifulSoup(xml, 'html.parser', from_encoding='utf-8')
+
+i = 0
+
+for li in soup.findAll('item'):
+    i = i + 1
+    retlist1.append([li.korsecnnm.string])
+    if li.shotnisin == None:
+        retlist2.append(['000000'])
+    else:
+        retlist2.append([li.shotnisin.string])
+
+
+stop2 = timeit.default_timer()
+print stop2 - stop1
