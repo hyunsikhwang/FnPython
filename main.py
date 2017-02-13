@@ -23,7 +23,7 @@ from urllib import urlencode, quote_plus
 from urllib2 import Request, urlopen
 
 from bs4 import BeautifulSoup
-import requests
+#import requests
 import lxml
 from lxml import html
 
