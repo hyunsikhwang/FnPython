@@ -76,7 +76,7 @@ def FindCodeAPI(APIKey, stock_name):
     request.get_method = lambda: 'GET'
     page = urlopen(request).read()
 
-    r = requests.get(url + queryParams)
+#    r = requests.get(url + queryParams)
 #    tree = lxml.html.fromstring(r.content)
 #    element1 = tree.xpath('//korSecnNm//text()')
 #    element2 = tree.xpath('//')
