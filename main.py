@@ -24,8 +24,8 @@ from urllib2 import Request, urlopen
 
 from bs4 import BeautifulSoup
 #import requests
-import lxml
-from lxml import html
+#import lxml
+#from lxml import html
 
 
 # 봇 토큰, 봇 API 주소
@@ -77,9 +77,9 @@ def FindCodeAPI(APIKey, stock_name):
     page = urlopen(request).read()
 
     r = requests.get(url + queryParams)
-    tree = lxml.html.fromstring(r.content)
-    element1 = tree.xpath('//korSecnNm//text()')
-    element2 = tree.xpath('//')
+#    tree = lxml.html.fromstring(r.content)
+#    element1 = tree.xpath('//korSecnNm//text()')
+#    element2 = tree.xpath('//')
     soup = BeautifulSoup(page, 'html.parser', from_encoding='utf-8')
 
     i = 0
