@@ -283,7 +283,7 @@ def process_cmds(msg):
             send_msg(chat_id, u'종목명을 검색할 수 없습니다. 다시 확인 후 입력해주세요.')
         elif len(result_list[0]) == 1 and result_list[0][0][0] == text:
             send_msg(chat_id, result_list[0][0][0] + u' 종목(' + result_list[1][0][0] + u')이 존재합니다.')
-            send_msg(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[0][0][0] + '_B_01_06.png')
+            send_msg(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[1][0][0] + '_B_01_06.png')
         else:
             count = 0
             for li in result_list[0]:
