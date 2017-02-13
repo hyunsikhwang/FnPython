@@ -23,6 +23,10 @@ from urllib import urlencode, quote_plus
 from urllib2 import Request, urlopen
 
 from bs4 import BeautifulSoup
+import requests
+import lxml
+from lxml import html
+
 
 # 봇 토큰, 봇 API 주소
 TOKEN = '303352490:AAGLVFQbnFyviIelWVBynx98JGqd_GoVRzQ'
@@ -72,6 +76,10 @@ def FindCodeAPI(APIKey, stock_name):
     request.get_method = lambda: 'GET'
     page = urlopen(request).read()
 
+    r = requests.get(url + queryParams)
+    tree = lxml.html.fromstring(r.content)
+    element1 = tree.xpath('//korSecnNm//text()')
+    element2 = tree.xpath('//')
     soup = BeautifulSoup(page, 'html.parser', from_encoding='utf-8')
 
     i = 0
@@ -275,12 +283,14 @@ def process_cmds(msg):
             send_msg(chat_id, u'종목명을 검색할 수 없습니다. 다시 확인 후 입력해주세요.')
         elif len(result_list[0]) == 1 and result_list[0][0][0] == text:
             send_msg(chat_id, result_list[0][0][0] + u' 종목(' + result_list[1][0][0] + u')이 존재합니다.')
+            send_msg(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[0][0][0] + '_B_01_06.png')
         else:
             count = 0
             for li in result_list[0]:
                 if li[0] == text:
                     send_msg(chat_id, u'동일한 종목이 발견되었습니다.')
                     send_msg(chat_id, text + u' 종목(' + result_list[1][count][0] + u')이 존재합니다.')
+                    send_msg(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[1][count][0] + '_B_01_06.png')
                     return
                 count += 1
             merge_list = MergeList(result_list[0])
