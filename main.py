@@ -185,13 +185,11 @@ def send_msg(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
     except Exception as e:
         logging.exception(e)
 
-def send_photo(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
+def send_photo(chat_id, text, reply_to=None, keyboard=None):
     u"""send_photo: 메시지 발송
     chat_id:    (integer) 메시지를 보낼 채팅 ID
     text:       (string)  메시지 내용
     reply_to:   (integer) ~메시지에 대한 답장
-    no_preview: (boolean) URL 자동 링크(미리보기) 끄기
-    keyboard:   (list)    커스텀 키보드 지정
     """
     params = {
         'chat_id': str(chat_id),
@@ -199,15 +197,7 @@ def send_photo(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
         }
     if reply_to:
         params['reply_to_message_id'] = reply_to
-    if no_preview:
-        params['disable_web_page_preview'] = no_preview
     if keyboard:
-        reply_markup = json.dumps({
-            'keyboard': keyboard,
-            'resize_keyboard': True,
-            'one_time_keyboard': False,
-            'selective': (reply_to == True),
-            })
         params['reply_markup'] = reply_markup
     try:
         urllib2.urlopen(BASE_URL + 'sendPhoto', urllib.urlencode(params)).read()
@@ -313,16 +303,16 @@ def process_cmds(msg):
             send_msg(chat_id, u'종목명을 검색할 수 없습니다. 다시 확인 후 입력해주세요.')
         elif len(result_list[0]) == 1 and result_list[0][0][0] == text:
             send_msg(chat_id, result_list[0][0][0] + u' 종목(' + result_list[1][0][0] + u')이 존재합니다.')
-            send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[1][0][0] + '_B_01_06.png', no_preview=False)
-            send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PBR_A' + result_list[1][0][0] + '_B_01_06.png', no_preview=False)
+            send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[1][0][0] + '_B_01_06.png')
+            send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PBR_A' + result_list[1][0][0] + '_B_01_06.png')
         else:
             count = 0
             for li in result_list[0]:
                 if li[0] == text:
                     send_msg(chat_id, u'동일한 종목이 발견되었습니다.')
                     send_msg(chat_id, text + u' 종목(' + result_list[1][count][0] + u')이 존재합니다.')
-                    send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[1][count][0] + '_B_01_06.png', no_preview=False)
-                    send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PBR_A' + result_list[1][count][0] + '_B_01_06.png', no_preview=False)
+                    send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[1][count][0] + '_B_01_06.png')
+                    send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PBR_A' + result_list[1][count][0] + '_B_01_06.png')
                     return
                 count += 1
             merge_list = MergeList(result_list[0])
