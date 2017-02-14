@@ -193,7 +193,7 @@ def send_photo(chat_id, text, reply_to=None, keyboard=None):
     """
     params = {
         'chat_id': str(chat_id),
-        'text': text.encode('utf-8'),
+        'photo': text.encode('utf-8'),
         }
     if reply_to:
         params['reply_to_message_id'] = reply_to
