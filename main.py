@@ -25,7 +25,6 @@ from urllib2 import Request, urlopen
 from bs4 import BeautifulSoup
 #import requests
 import lxml.html
-import lxml
 #from lxml import html
 
 
