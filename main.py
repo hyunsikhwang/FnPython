@@ -71,9 +71,11 @@ class CommandStatus(ndb.Model):
 
 def FindInfo(stockcode):
     url_header = 'http://comp.fnguide.com/SVO2/ASP/SVD_main.asp?pGB=1&gicode=A'
-    url_footer = '&cID=&MenuYn=Y&ReportGB=&NewMenuID=11&stkGb=701'
+    url_footer = '&cID=&MenuYn=Y&ReportGB=&NewMenuID=11&stkGb=&strResearchYN='
 
-    html = lxml.html.parse(url_header + stockcode + url_footer)
+    url = url_header + stockcode + url_footer
+
+    html = lxml.html.parse(url)
 
     packages = html.xpath('//div[@class="corp_group2"]/dl/dd/text()')
 
