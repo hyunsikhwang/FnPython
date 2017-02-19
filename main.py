@@ -327,7 +327,7 @@ def process_cmds(msg):
         elif len(result_list[0]) == 1 and result_list[0][0][0] == text:
             send_msg(chat_id, result_list[0][0][0] + u' 종목(' + result_list[1][0][0] + u')이 존재합니다.')
             ValInfo = FindInfo(result_list[1][0][0])
-            send_msg(chat_id, u'PER: ' + ValInfo[0] + u' 12M PER: ' + ValInfo[1] + u' PBR: ' + ValInfo[3] + + u' 배당수익률: ' + ValInfo[4])
+            send_msg(chat_id, u'PER: ' + ValInfo[0] + u' 12M PER: ' + ValInfo[1] + u' PBR: ' + ValInfo[3] + u' 배당수익률: ' + ValInfo[4])
             send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[1][0][0] + '_B_01_06.png')
             send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PBR_A' + result_list[1][0][0] + '_B_01_06.png')
         else:
@@ -337,7 +337,7 @@ def process_cmds(msg):
                     send_msg(chat_id, u'동일한 종목이 발견되었습니다.')
                     send_msg(chat_id, text + u' 종목(' + result_list[1][count][0] + u')이 존재합니다.')
                     ValInfo = FindInfo(result_list[1][0][0])
-                    send_msg(chat_id, u'PER: ' + ValInfo[0] + u' 12M PER: ' + ValInfo[1] + u' PBR: ' + ValInfo[3] + + u' 배당수익률: ' + ValInfo[4])
+                    send_msg(chat_id, u'PER: ' + ValInfo[0] + u' 12M PER: ' + ValInfo[1] + u' PBR: ' + ValInfo[3] + u' 배당수익률: ' + ValInfo[4])
                     send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[1][count][0] + '_B_01_06.png')
                     send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PBR_A' + result_list[1][count][0] + '_B_01_06.png')
                     return
