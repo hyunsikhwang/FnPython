@@ -25,6 +25,7 @@ from urllib2 import Request, urlopen
 from bs4 import BeautifulSoup
 #import requests
 import lxml.html
+from google.appengine.api import urlfetch
 #from lxml import html
 
 
@@ -73,8 +74,10 @@ def FindInfo(stockcode):
     url_footer = '&cID=&MenuYn=Y&ReportGB=&NewMenuID=11&stkGb=&strResearchYN='
 
     url = url_header + stockcode + url_footer
+    result = urlfetch.fetch(url)
 
-    html = lxml.html.parse(url)
+    #html = lxml.html.parse(url)
+    html = lxml.html.fromstring(result.content)
 
     packages = html.xpath('//div[@class="corp_group2"]/dl/dd/text()')
 
