@@ -68,6 +68,21 @@ ST_ECHO, ST_INFO = range(2)
 class CommandStatus(ndb.Model):
     command_status = ndb.IntegerProperty(required=True, indexed=True, default=False,)
 
+def FindInfo(stockcode):
+    url_header = 'http://comp.fnguide.com/SVO2/ASP/SVD_main.asp?pGB=1&gicode=A'
+    url_footer = '&cID=&MenuYn=Y&ReportGB=&NewMenuID=11&stkGb=&strResearchYN='
+
+    html = lxml.html.parse(url)
+
+    packages = html.xpath('//div[@class="corp_group2"]/dl/dd/text()')
+
+    STCKInfo = {}
+
+    for itm in packages:
+        STCKInfo.append(itm)
+
+    return STCInfo
+
 def FindCodeAPI(APIKey, stock_name):
     url = 'http://api.seibro.or.kr/openapi/service/StockSvc/getStkIsinByNm'
     queryParams = '?' + urlencode({ quote_plus('ServiceKey') : APIKey, quote_plus('secnNm') : stock_name.encode('utf-8'), quote_plus('pageNo') : '1', quote_plus(u'numOfRows') : '500' })
@@ -303,6 +318,8 @@ def process_cmds(msg):
             send_msg(chat_id, u'종목명을 검색할 수 없습니다. 다시 확인 후 입력해주세요.')
         elif len(result_list[0]) == 1 and result_list[0][0][0] == text:
             send_msg(chat_id, result_list[0][0][0] + u' 종목(' + result_list[1][0][0] + u')이 존재합니다.')
+            ValInfo = FindInfo(result_list[1][0][0])
+            send_msg(chat_id, ValInfo[1])
             send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[1][0][0] + '_B_01_06.png')
             send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PBR_A' + result_list[1][0][0] + '_B_01_06.png')
         else:
