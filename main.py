@@ -79,12 +79,15 @@ def FindInfo(stockcode):
 
     packages = html.xpath('//div[@class="corp_group2"]/dl/dd/text()')
 
-    STCKInfo = {}
+    STCInfo = {}
+    i = 0
 
-    for itm in packages:
-        STCKInfo.append(itm)
+    for valinfo in packages:
+        STCInfo[i] = valinfo
+        i = i + 1
 
     return STCInfo
+
 
 def FindCodeAPI(APIKey, stock_name):
     url = 'http://api.seibro.or.kr/openapi/service/StockSvc/getStkIsinByNm'
