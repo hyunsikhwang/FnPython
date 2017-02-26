@@ -14,4 +14,4 @@ CurrencyInfo = GetCurrency(url_quote)
 i = 0
 
 for itm in CurrencyInfo['rates']:
-    print itm[1][0]
+    print itm[1][1]
