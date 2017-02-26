@@ -289,7 +289,7 @@ def cmd_bond(chat_id):
     u"""cmd_bond: 채권 수익률 조회
     chat_id: (integer) 채팅 ID
     """
-    BondRatesInfo = ''
+    BondRatesInfo = '채권만기별 국고채 수익률 정보\n'
     BondRates = CollectBondRates(url_bondinfo)
     for itm in BondRates['current']:
         BondRatesInfo = BondRatesInfo + itm[0] + ' - ' + str(itm[1]) + '\n'
