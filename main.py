@@ -36,12 +36,16 @@ BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 # 종목명 찾기 API Key
 APIKey = "CJL9jdtz5gsb4z4PpjFpCDjdz/UIk8cFAGgHbJvgLEJxPWLZaTx3wIcBNPkGu/KIKsI1zAy1XtfQJLG0VV0vVg=="
 
+# 채권 수익률 정보 페이지
+url_bondinfo = "http://sbcharts.investing.com/bond_charts/bonds_chart_60.json"
+
 # 봇이 응답할 명령어
 CMD_START     = '/start'
 CMD_STOP      = '/stop'
 CMD_HELP      = '/help'
 CMD_BROADCAST = '/broadcast'
 CMD_INFO      = '/info'
+CMD_BOND      = '/bond'
 CMD_CLOSE     = '/close'
 
 # 봇 사용법 & 메시지
@@ -50,6 +54,7 @@ USAGE = u"""[사용법] 아래 명령어를 메시지로 보내거나 버튼을 
 /stop  - (로봇 비활성화)
 /help  - (이 도움말 보여주기)
 /info  - (정보 조회)
+/bond  - (채권 수익률 조회)
 """
 MSG_START = u'봇을 시작합니다.'
 MSG_STOP  = u'봇을 정지합니다.'
@@ -60,11 +65,12 @@ CUSTOM_KEYBOARD = [
         [CMD_STOP],
         [CMD_HELP],
         [CMD_INFO],
+        [CMD_BOND]
         ]
 
 USER_KEYBOARD = []
 
-ST_ECHO, ST_INFO = range(2)
+ST_ECHO, ST_INFO, ST_BOND = range(3)
 
 class CommandStatus(ndb.Model):
     command_status = ndb.IntegerProperty(required=True, indexed=True, default=False,)
@@ -127,6 +133,15 @@ def MergeList(reflist):
         ml += il[0] + "\n"
 
     return ml
+
+
+def CollectBondRates(url):
+    f = urllib2.urlopen(url)
+    page = f.read().decode('euc-kr', 'ignore')
+    f.close()
+    js = json.loads(page)
+    return js
+
 
 # 채팅별 로봇 활성화 상태
 # 구글 앱 엔진의 Datastore(NDB)에 상태를 저장하고 읽음
@@ -270,6 +285,14 @@ def cmd_addquote(chat_id, text, result_list):
     USER_KEYBOARD = result_list
     send_msg(chat_id, u'종목을 선택해주십시오.\n선택 작업 종료는 /close 을 선택해주세요.', keyboard=USER_KEYBOARD)
 
+def cmd_bond(chat_id):
+    u"""cmd_bond: 채권 수익률 조회
+    chat_id: (integer) 채팅 ID
+    """
+    BondRates = CollectBondRates(url_bondinfo)
+    for itm in BondRates['current']:
+        send_msg(chat_id, itm)
+
 def cmd_close(chat_id):
     u"""cmd_close: 종목 조회 모드 종료
     chat_id: (integer) 채팅 ID
@@ -319,6 +342,9 @@ def process_cmds(msg):
         return
     if CMD_INFO == text:
         cmd_info(chat_id)
+        return
+    if CMD_BOND == text:
+        cmd_bond(chat_id)
         return
     if get_status(chat_id) == ST_INFO:
         result_list = FindCodeAPI(APIKey, text)
