@@ -14,3 +14,4 @@ CurrencyInfo = GetCurrency(url_quote)
 i = 0
 
 print CurrencyInfo['rates']['USD']
+print CurrencyInfo['rates']['KRW']
