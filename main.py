@@ -292,7 +292,7 @@ def cmd_bond(chat_id):
     BondRatesInfo = ''
     BondRates = CollectBondRates(url_bondinfo)
     for itm in BondRates['current']:
-        BondRatesInfo = BondRatesInfo + itm[0] + ' - ' + itm[1] + '\n'
+        BondRatesInfo = BondRatesInfo + itm[0] + ' - ' + str(itm[1]) + '\n'
     send_msg(chat_id, BondRatesInfo)
 
 def cmd_close(chat_id):
