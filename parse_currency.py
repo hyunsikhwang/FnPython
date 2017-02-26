@@ -10,7 +10,7 @@ def GetCurrency(url):
     js = json.loads(page)
     return js
 
-StockInfo = CollectCurrency(url_quote)
+CurrencyInfo = GetCurrency(url_quote)
 
-for itm in StockInfo['rates']:
+for itm in CurrencyInfo['rates']:
     print itm
