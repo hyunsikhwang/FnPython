@@ -291,7 +291,7 @@ def cmd_bond(chat_id):
     """
     BondRates = CollectBondRates(url_bondinfo)
     for itm in BondRates['current']:
-        send_msg(chat_id, itm[0] + str(itm[1])
+        send_msg(chat_id, itm[0] + str(itm[1]))
 
 def cmd_close(chat_id):
     u"""cmd_close: 종목 조회 모드 종료
