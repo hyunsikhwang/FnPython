@@ -14,4 +14,4 @@ CurrencyInfo = GetCurrency(url_quote)
 i = 0
 
 UpK = CurrencyInfo['rates']['KRW'] / CurrencyInfo['rates']['USD']
-print Upk
+print UpK
