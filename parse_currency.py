@@ -13,6 +13,4 @@ def GetCurrency(url):
 CurrencyInfo = GetCurrency(url_quote)
 i = 0
 
-for itm in CurrencyInfo['rates']:
-
 print CurrencyInfo['USD']
