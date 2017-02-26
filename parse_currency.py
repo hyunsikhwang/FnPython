@@ -11,6 +11,8 @@ def GetCurrency(url):
     return js
 
 CurrencyInfo = GetCurrency(url_quote)
+i = 0
 
-print CurrencyInfo['USD']
-print CurrencyInfo['KRW']
+for itm in CurrencyInfo['rates']:
+    print itm[i]
+    i=i+1
