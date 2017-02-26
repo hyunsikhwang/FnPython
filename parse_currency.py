@@ -12,5 +12,5 @@ def GetCurrency(url):
 
 CurrencyInfo = GetCurrency(url_quote)
 
-for itm in CurrencyInfo['rates']:
-    print itm
+print CurrencyInfo['USD']
+print CurrencyInfo['KRW]
