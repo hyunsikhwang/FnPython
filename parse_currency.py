@@ -13,4 +13,4 @@ def GetCurrency(url):
 CurrencyInfo = GetCurrency(url_quote)
 
 print CurrencyInfo['USD']
-print CurrencyInfo['KRW]
+print CurrencyInfo['KRW']
