@@ -61,8 +61,8 @@ MSG_STOP  = u'봇을 정지합니다.'
 
 # 커스텀 키보드
 CUSTOM_KEYBOARD = [
-        [[CMD_START],[CMD_STOP],[CMD_HELP]],
-        [[CMD_INFO],[CMD_BOND]]
+        [CMD_START,CMD_STOP,CMD_HELP],
+        [CMD_INFO,CMD_BOND]
         ]
 
 USER_KEYBOARD = []
