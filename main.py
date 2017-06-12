@@ -407,10 +407,24 @@ class WebhookHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(body))
         process_cmds(body['message'])
 
+class WebhookHandler1(webapp2.RequestHandler):
+    @cron_method
+    def get(self):
+        now = time.gmtime(time.time() + 3600 * 9)
+        # 토요일이나 일요일인 경우엔 알림 중지
+        if now.tm_wday == 5 or now.tm_wday == 6:
+            return
+        else:
+            urlfetch.set_default_fetch_deadline(60)
+            s = '테스트입니다.'
+            broadcast(s)
+
+        
 # 구글 앱 엔진에 웹 요청 핸들러 지정
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
     ('/updates', GetUpdatesHandler),
     ('/set-webhook', SetWebhookHandler),
     ('/webhook', WebhookHandler),
+    ('/broadcast-news', WebhookHandler1),
 ], debug=True)
