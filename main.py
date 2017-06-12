@@ -424,7 +424,7 @@ class WebhookHandler1(webapp2.RequestHandler):
             return
         else:
             urlfetch.set_default_fetch_deadline(60)
-            s = '테스트입니다.'
+            s = u'테스트입니다.'
             broadcast(s)
 
         
