@@ -6,19 +6,19 @@
 # github:      https://github.com/bakyeono/using-telegram-bot-api
 # githun:      https://github.com/hyunsikhwang/FnPython
 
-# êµ¬ê?? ?•± ?—”ì§? ?¼?´ë¸ŒëŸ¬ë¦? ë¡œë“œ
+# êµ¬ê¸€ ì•± ì—”ì§„ ë¼ì´ë¸ŒëŸ¬ë¦¬ ë¡œë“œ
 from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
 import webapp2
 
-# URL, JSON, ë¡œê·¸, ? •ê·œí‘œ?˜„?‹ ê´?? ¨ ?¼?´ë¸ŒëŸ¬ë¦? ë¡œë“œ
+# URL, JSON, ë¡œê·¸, ì •ê·œí‘œí˜„ì‹ ê´€ë ¨ ë¼ì´ë¸ŒëŸ¬ë¦¬ ë¡œë“œ
 import urllib
 import urllib2
 import json
 import logging
 import re
 
-# ì¢…ëª©ëª? ì°¾ê¸° API ê´?? ¨ ?¼?´ë¸ŒëŸ¬ë¦? ë¡œë“œ
+# ì¢…ëª©ëª… ì°¾ê¸° API ê´€ë ¨ ë¼ì´ë¸ŒëŸ¬ë¦¬ ë¡œë“œ
 from urllib import urlencode, quote_plus
 from urllib2 import Request, urlopen
 
@@ -29,17 +29,17 @@ from google.appengine.api import urlfetch
 #from lxml import html
 
 
-# ë´? ?† ?°, ë´? API ì£¼ì†Œ
+# ë´‡ í† í°, ë´‡ API ì£¼ì†Œ
 TOKEN = '303352490:AAGLVFQbnFyviIelWVBynx98JGqd_GoVRzQ'
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 
-# ì¢…ëª©ëª? ì°¾ê¸° API Key
+# ì¢…ëª©ëª… ì°¾ê¸° API Key
 APIKey = "CJL9jdtz5gsb4z4PpjFpCDjdz/UIk8cFAGgHbJvgLEJxPWLZaTx3wIcBNPkGu/KIKsI1zAy1XtfQJLG0VV0vVg=="
 
-# ì±„ê¶Œ ?ˆ˜?µë¥? ? •ë³? ?˜?´ì§?
+# ì±„ê¶Œ ìˆ˜ìµë¥  ì •ë³´ í˜ì´ì§€
 url_bondinfo = "http://sbcharts.investing.com/bond_charts/bonds_chart_60.json"
 
-# ë´‡ì´ ?‘?‹µ?•  ëª…ë ¹?–´
+# ë´‡ì´ ì‘ë‹µí•  ëª…ë ¹ì–´
 CMD_START     = '/start'
 CMD_STOP      = '/stop'
 CMD_HELP      = '/help'
@@ -48,18 +48,18 @@ CMD_INFO      = '/info'
 CMD_BOND      = '/bond'
 CMD_CLOSE     = '/close'
 
-# ë´? ?‚¬?š©ë²? & ë©”ì‹œì§?
-USAGE = u"""[?‚¬?š©ë²?] ?•„?˜ ëª…ë ¹?–´ë¥? ë©”ì‹œì§?ë¡? ë³´ë‚´ê±°ë‚˜ ë²„íŠ¼?„ ?ˆ„ë¥´ì‹œë©? ?©?‹ˆ?‹¤.
-/start - (ë¡œë´‡ ?™œ?„±?™”)
-/stop  - (ë¡œë´‡ ë¹„í™œ?„±?™”)
-/help  - (?´ ?„???ë§? ë³´ì—¬ì£¼ê¸°)
-/info  - (? •ë³? ì¡°íšŒ)
-/bond  - (ì±„ê¶Œ ?ˆ˜?µë¥? ì¡°íšŒ)
+# ë´‡ ì‚¬ìš©ë²• & ë©”ì‹œì§€
+USAGE = u"""[ì‚¬ìš©ë²•] ì•„ë˜ ëª…ë ¹ì–´ë¥¼ ë©”ì‹œì§€ë¡œ ë³´ë‚´ê±°ë‚˜ ë²„íŠ¼ì„ ëˆ„ë¥´ì‹œë©´ ë©ë‹ˆë‹¤.
+/start - (ë¡œë´‡ í™œì„±í™”)
+/stop  - (ë¡œë´‡ ë¹„í™œì„±í™”)
+/help  - (ì´ ë„ì›€ë§ ë³´ì—¬ì£¼ê¸°)
+/info  - (ì •ë³´ ì¡°íšŒ)
+/bond  - (ì±„ê¶Œ ìˆ˜ìµë¥  ì¡°íšŒ)
 """
-MSG_START = u'ë´‡ì„ ?‹œ?‘?•©?‹ˆ?‹¤.'
-MSG_STOP  = u'ë´‡ì„ ? •ì§??•©?‹ˆ?‹¤.'
+MSG_START = u'ë´‡ì„ ì‹œì‘í•©ë‹ˆë‹¤.'
+MSG_STOP  = u'ë´‡ì„ ì •ì§€í•©ë‹ˆë‹¤.'
 
-# ì»¤ìŠ¤??? ?‚¤ë³´ë“œ
+# ì»¤ìŠ¤í…€ í‚¤ë³´ë“œ
 CUSTOM_KEYBOARD = [
         [CMD_START,CMD_STOP,CMD_HELP],
         [CMD_INFO,CMD_BOND]
@@ -140,24 +140,24 @@ def CollectBondRates(url):
     return js
 
 
-# ì±„íŒ…ë³? ë¡œë´‡ ?™œ?„±?™” ?ƒ?ƒœ
-# êµ¬ê?? ?•± ?—”ì§„ì˜ Datastore(NDB)?— ?ƒ?ƒœë¥? ????¥?•˜ê³? ?½?Œ
-# ?‚¬?š©?ê°? /start ?ˆ„ë¥´ë©´ ?™œ?„±?™”
-# ?‚¬?š©?ê°? /stop  ?ˆ„ë¥´ë©´ ë¹„í™œ?„±?™”
+# ì±„íŒ…ë³„ ë¡œë´‡ í™œì„±í™” ìƒíƒœ
+# êµ¬ê¸€ ì•± ì—”ì§„ì˜ Datastore(NDB)ì— ìƒíƒœë¥¼ ì €ì¥í•˜ê³  ì½ìŒ
+# ì‚¬ìš©ìê°€ /start ëˆ„ë¥´ë©´ í™œì„±í™”
+# ì‚¬ìš©ìê°€ /stop  ëˆ„ë¥´ë©´ ë¹„í™œì„±í™”
 class EnableStatus(ndb.Model):
     enabled = ndb.BooleanProperty(required=True, indexed=True, default=False,)
 
 def set_enabled(chat_id, enabled):
-    u"""set_enabled: ë´? ?™œ?„±?™”/ë¹„í™œ?„±?™” ?ƒ?ƒœ ë³?ê²?
-    chat_id:    (integer) ë´‡ì„ ?™œ?„±?™”/ë¹„í™œ?„±?™”?•  ì±„íŒ… ID
-    enabled:    (boolean) ì§?? •?•  ?™œ?„±?™”/ë¹„í™œ?„±?™” ?ƒ?ƒœ
+    u"""set_enabled: ë´‡ í™œì„±í™”/ë¹„í™œì„±í™” ìƒíƒœ ë³€ê²½
+    chat_id:    (integer) ë´‡ì„ í™œì„±í™”/ë¹„í™œì„±í™”í•  ì±„íŒ… ID
+    enabled:    (boolean) ì§€ì •í•  í™œì„±í™”/ë¹„í™œì„±í™” ìƒíƒœ
     """
     es = EnableStatus.get_or_insert(str(chat_id))
     es.enabled = enabled
     es.put()
 
 def get_enabled(chat_id):
-    u"""get_enabled: ë´? ?™œ?„±?™”/ë¹„í™œ?„±?™” ?ƒ?ƒœ ë°˜í™˜
+    u"""get_enabled: ë´‡ í™œì„±í™”/ë¹„í™œì„±í™” ìƒíƒœ ë°˜í™˜
     return: (boolean)
     """
     es = EnableStatus.get_by_id(str(chat_id))
@@ -166,7 +166,7 @@ def get_enabled(chat_id):
     return False
 
 def get_status(chat_id):
-    u"""get_status: ?‚¬?š© ?ƒ?ƒœ ë°˜í™˜
+    u"""get_status: ì‚¬ìš© ìƒíƒœ ë°˜í™˜
     return: (boolean)
     """
     cs = CommandStatus.get_by_id(str(chat_id))
@@ -175,29 +175,29 @@ def get_status(chat_id):
     return False
 
 def get_enabled_chats():
-    u"""get_enabled: ë´‡ì´ ?™œ?„±?™”?œ ì±„íŒ… ë¦¬ìŠ¤?Š¸ ë°˜í™˜
+    u"""get_enabled: ë´‡ì´ í™œì„±í™”ëœ ì±„íŒ… ë¦¬ìŠ¤íŠ¸ ë°˜í™˜
     return: (list of EnableStatus)
     """
     query = EnableStatus.query(EnableStatus.enabled == True)
     return query.fetch()
 
 def set_status(chat_id, cmd_status):
-    u"""set_status: ëª…ë ¹?–´ ?ƒ?ƒœ
+    u"""set_status: ëª…ë ¹ì–´ ìƒíƒœ
     chat_id:    (integer) ì±„íŒ… ID
-    cmd_status: (integer) ëª…ë ¹?–´ ?ƒ?ƒœ(info)
+    cmd_status: (integer) ëª…ë ¹ì–´ ìƒíƒœ(info)
     """
     cs = CommandStatus.get_or_insert(str(chat_id))
     cs.command_status = cmd_status
     cs.put()
 
-# ë©”ì‹œì§? ë°œì†¡ ê´?? ¨ ?•¨?ˆ˜?“¤
+# ë©”ì‹œì§€ ë°œì†¡ ê´€ë ¨ í•¨ìˆ˜ë“¤
 def send_msg(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
-    u"""send_msg: ë©”ì‹œì§? ë°œì†¡
-    chat_id:    (integer) ë©”ì‹œì§?ë¥? ë³´ë‚¼ ì±„íŒ… ID
-    text:       (string)  ë©”ì‹œì§? ?‚´?š©
-    reply_to:   (integer) ~ë©”ì‹œì§??— ????•œ ?‹µ?¥
-    no_preview: (boolean) URL ??™ ë§í¬(ë¯¸ë¦¬ë³´ê¸°) ?„ê¸?
-    keyboard:   (list)    ì»¤ìŠ¤??? ?‚¤ë³´ë“œ ì§?? •
+    u"""send_msg: ë©”ì‹œì§€ ë°œì†¡
+    chat_id:    (integer) ë©”ì‹œì§€ë¥¼ ë³´ë‚¼ ì±„íŒ… ID
+    text:       (string)  ë©”ì‹œì§€ ë‚´ìš©
+    reply_to:   (integer) ~ë©”ì‹œì§€ì— ëŒ€í•œ ë‹µì¥
+    no_preview: (boolean) URL ìë™ ë§í¬(ë¯¸ë¦¬ë³´ê¸°) ë„ê¸°
+    keyboard:   (list)    ì»¤ìŠ¤í…€ í‚¤ë³´ë“œ ì§€ì •
     """
     params = {
         'chat_id': str(chat_id),
@@ -221,10 +221,10 @@ def send_msg(chat_id, text, reply_to=None, no_preview=True, keyboard=None):
         logging.exception(e)
 
 def send_photo(chat_id, text, reply_to=None, keyboard=None):
-    u"""send_photo: ë©”ì‹œì§? ë°œì†¡
-    chat_id:    (integer) ë©”ì‹œì§?ë¥? ë³´ë‚¼ ì±„íŒ… ID
-    text:       (string)  ë©”ì‹œì§? ?‚´?š©
-    reply_to:   (integer) ~ë©”ì‹œì§??— ????•œ ?‹µ?¥
+    u"""send_photo: ë©”ì‹œì§€ ë°œì†¡
+    chat_id:    (integer) ë©”ì‹œì§€ë¥¼ ë³´ë‚¼ ì±„íŒ… ID
+    text:       (string)  ë©”ì‹œì§€ ë‚´ìš©
+    reply_to:   (integer) ~ë©”ì‹œì§€ì— ëŒ€í•œ ë‹µì¥
     """
     params = {
         'chat_id': str(chat_id),
@@ -241,52 +241,52 @@ def send_photo(chat_id, text, reply_to=None, keyboard=None):
 
 
 def broadcast(text):
-    u"""broadcast: ë´‡ì´ ì¼œì ¸ ?ˆ?Š” ëª¨ë“  ì±„íŒ…?— ë©”ì‹œì§? ë°œì†¡
-    text:       (string)  ë©”ì‹œì§? ?‚´?š©
+    u"""broadcast: ë´‡ì´ ì¼œì ¸ ìˆëŠ” ëª¨ë“  ì±„íŒ…ì— ë©”ì‹œì§€ ë°œì†¡
+    text:       (string)  ë©”ì‹œì§€ ë‚´ìš©
     """
     for chat in get_enabled_chats():
         send_msg(chat.key.string_id(), text)
 
-# ë´? ëª…ë ¹ ì²˜ë¦¬ ?•¨?ˆ˜?“¤
+# ë´‡ ëª…ë ¹ ì²˜ë¦¬ í•¨ìˆ˜ë“¤
 def cmd_start(chat_id):
-    u"""cmd_start: ë´‡ì„ ?™œ?„±?™”?•˜ê³?, ?™œ?„±?™” ë©”ì‹œì§? ë°œì†¡
+    u"""cmd_start: ë´‡ì„ í™œì„±í™”í•˜ê³ , í™œì„±í™” ë©”ì‹œì§€ ë°œì†¡
     chat_id: (integer) ì±„íŒ… ID
     """
     set_enabled(chat_id, True)
     send_msg(chat_id, MSG_START, keyboard=CUSTOM_KEYBOARD)
 
 def cmd_stop(chat_id):
-    u"""cmd_stop: ë´‡ì„ ë¹„í™œ?„±?™”?•˜ê³?, ë¹„í™œ?„±?™” ë©”ì‹œì§? ë°œì†¡
+    u"""cmd_stop: ë´‡ì„ ë¹„í™œì„±í™”í•˜ê³ , ë¹„í™œì„±í™” ë©”ì‹œì§€ ë°œì†¡
     chat_id: (integer) ì±„íŒ… ID
     """
     set_enabled(chat_id, False)
     send_msg(chat_id, MSG_STOP)
 
 def cmd_help(chat_id):
-    u"""cmd_help: ë´? ?‚¬?š©ë²? ë©”ì‹œì§? ë°œì†¡
+    u"""cmd_help: ë´‡ ì‚¬ìš©ë²• ë©”ì‹œì§€ ë°œì†¡
     chat_id: (integer) ì±„íŒ… ID
     """
     send_msg(chat_id, USAGE, keyboard=CUSTOM_KEYBOARD)
 
 def cmd_info(chat_id):
-    u"""cmd_info: ì¢…ëª© ? •ë³? ì¡°íšŒ
+    u"""cmd_info: ì¢…ëª© ì •ë³´ ì¡°íšŒ
     chat_id: (integer) ì±„íŒ… ID
     """
     set_status(chat_id, ST_INFO)
-    send_msg(chat_id, u'ì¡°íšŒ?•  ì¢…ëª© ?´ë¦„ì„ ?…? ¥?•˜?„¸?š”.')
+    send_msg(chat_id, u'ì¡°íšŒí•  ì¢…ëª© ì´ë¦„ì„ ì…ë ¥í•˜ì„¸ìš”.')
 
 def cmd_addquote(chat_id, text, result_list):
-    u"""cmd_addquote: ì¢…ëª© ì¶”ê??
+    u"""cmd_addquote: ì¢…ëª© ì¶”ê°€
     chat_id: (integer) ì±„íŒ… ID
     """
     USER_KEYBOARD = result_list
-    send_msg(chat_id, u'ì¢…ëª©?„ ?„ ?ƒ?•´ì£¼ì‹­?‹œ?˜¤.\n?„ ?ƒ ?‘?—… ì¢…ë£Œ?Š” /close ?„ ?„ ?ƒ?•´ì£¼ì„¸?š”.', keyboard=USER_KEYBOARD)
+    send_msg(chat_id, u'ì¢…ëª©ì„ ì„ íƒí•´ì£¼ì‹­ì‹œì˜¤.\nì„ íƒ ì‘ì—… ì¢…ë£ŒëŠ” /close ì„ ì„ íƒí•´ì£¼ì„¸ìš”.', keyboard=USER_KEYBOARD)
 
 def cmd_bond(chat_id):
-    u"""cmd_bond: ì±„ê¶Œ ?ˆ˜?µë¥? ì¡°íšŒ
+    u"""cmd_bond: ì±„ê¶Œ ìˆ˜ìµë¥  ì¡°íšŒ
     chat_id: (integer) ì±„íŒ… ID
     """
-    BondRatesInfo = u'ì±„ê¶Œë§Œê¸°ë³? êµ?ê³ ì±„ ?ˆ˜?µë¥? ? •ë³?\n'
+    BondRatesInfo = u'ì±„ê¶Œë§Œê¸°ë³„ êµ­ê³ ì±„ ìˆ˜ìµë¥  ì •ë³´\n'
     BondRates = CollectBondRates(url_bondinfo)
     for itm in BondRates['current']:
         BondRatesInfo = BondRatesInfo + itm[0] + ' - ' + str(itm[1]) + '\n'
@@ -297,36 +297,28 @@ def cmd_close(chat_id):
     chat_id: (integer) ì±„íŒ… ID
     """
     set_status(chat_id, ST_ECHO)
-    send_msg(chat_id, u'ì¢…ëª© ì¡°íšŒê°? ì¢…ë£Œ?˜?—ˆ?Šµ?‹ˆ?‹¤.', keyboard=CUSTOM_KEYBOARD)
+    send_msg(chat_id, u'ì¢…ëª© ì¡°íšŒê°€ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.', keyboard=CUSTOM_KEYBOARD)
 
 def cmd_broadcast(chat_id, text):
-    u"""cmd_broadcast: ë´‡ì´ ?™œ?„±?™”?œ ëª¨ë“  ì±„íŒ…?— ë©”ì‹œì§? ë°©ì†¡
+    u"""cmd_broadcast: ë´‡ì´ í™œì„±í™”ëœ ëª¨ë“  ì±„íŒ…ì— ë©”ì‹œì§€ ë°©ì†¡
     chat_id: (integer) ì±„íŒ… ID
-    text:    (string)  ë°©ì†¡?•  ë©”ì‹œì§?
+    text:    (string)  ë°©ì†¡í•  ë©”ì‹œì§€
     """
-    send_msg(chat_id, u'ë©”ì‹œì§?ë¥? ë°©ì†¡?•©?‹ˆ?‹¤.', keyboard=CUSTOM_KEYBOARD)
+    send_msg(chat_id, u'ë©”ì‹œì§€ë¥¼ ë°©ì†¡í•©ë‹ˆë‹¤.', keyboard=CUSTOM_KEYBOARD)
     broadcast(text)
 
 def cmd_echo(chat_id, text, reply_to):
-    u"""cmd_echo: ?‚¬?š©??˜ ë©”ì‹œì§?ë¥? ?”°?¼?„œ ?‹µ?¥
+    u"""cmd_echo: ì‚¬ìš©ìì˜ ë©”ì‹œì§€ë¥¼ ë”°ë¼ì„œ ë‹µì¥
     chat_id:  (integer) ì±„íŒ… ID
-    text:     (string)  ?‚¬?š©?ê°? ë³´ë‚¸ ë©”ì‹œì§? ?‚´?š©
-    reply_to: (integer) ?‹µ?¥?•  ë©”ì‹œì§? ID
+    text:     (string)  ì‚¬ìš©ìê°€ ë³´ë‚¸ ë©”ì‹œì§€ ë‚´ìš©
+    reply_to: (integer) ë‹µì¥í•  ë©”ì‹œì§€ ID
     """
     send_msg(chat_id, text, reply_to=reply_to)
 
-def cron_method(handler):
-    def check_if_cron(self, *args, **kwargs):
-        if self.request.headers.get('X-AppEngine-Cron') is None:
-            self.error(403)
-        else:
-            return handler(self, *args, **kwargs)
-    return check_if_cron
-
 def process_cmds(msg):
-    u"""?‚¬?š©? ë©”ì‹œì§?ë¥? ë¶„ì„?•´ ë´? ëª…ë ¹?„ ì²˜ë¦¬
+    u"""ì‚¬ìš©ì ë©”ì‹œì§€ë¥¼ ë¶„ì„í•´ ë´‡ ëª…ë ¹ì„ ì²˜ë¦¬
     chat_id: (integer) ì±„íŒ… ID
-    text:    (string)  ?‚¬?š©?ê°? ë³´ë‚¸ ë©”ì‹œì§? ?‚´?š©
+    text:    (string)  ì‚¬ìš©ìê°€ ë³´ë‚¸ ë©”ì‹œì§€ ë‚´ìš©
     """
     msg_id = msg['message_id']
     chat_id = msg['chat']['id']
@@ -356,21 +348,21 @@ def process_cmds(msg):
     if get_status(chat_id) == ST_INFO:
         result_list = FindCodeAPI(APIKey, text)
         if not result_list[0]:
-            send_msg(chat_id, u'ì¢…ëª©ëª…ì„ ê²??ƒ‰?•  ?ˆ˜ ?—†?Šµ?‹ˆ?‹¤. ?‹¤?‹œ ?™•?¸ ?›„ ?…? ¥?•´ì£¼ì„¸?š”.')
+            send_msg(chat_id, u'ì¢…ëª©ëª…ì„ ê²€ìƒ‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ë‹¤ì‹œ í™•ì¸ í›„ ì…ë ¥í•´ì£¼ì„¸ìš”.')
         elif len(result_list[0]) == 1 and result_list[0][0][0] == text:
-            send_msg(chat_id, result_list[0][0][0] + u' ì¢…ëª©(' + result_list[1][0][0] + u')?´ ì¡´ì¬?•©?‹ˆ?‹¤.')
+            send_msg(chat_id, result_list[0][0][0] + u' ì¢…ëª©(' + result_list[1][0][0] + u')ì´ ì¡´ì¬í•©ë‹ˆë‹¤.')
             ValInfo = FindInfo(result_list[1][0][0])
-            send_msg(chat_id, u'PER: ' + ValInfo[0] + u' 12M PER: ' + ValInfo[1] + u' PBR: ' + ValInfo[3] + u' ë°°ë‹¹?ˆ˜?µë¥?: ' + ValInfo[4])
+            send_msg(chat_id, u'PER: ' + ValInfo[0] + u' 12M PER: ' + ValInfo[1] + u' PBR: ' + ValInfo[3] + u' ë°°ë‹¹ìˆ˜ìµë¥ : ' + ValInfo[4])
             send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[1][0][0] + '_B_01_06.png')
             send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PBR_A' + result_list[1][0][0] + '_B_01_06.png')
         else:
             count = 0
             for li in result_list[0]:
                 if li[0] == text:
-                    send_msg(chat_id, u'?™?¼?•œ ì¢…ëª©?´ ë°œê²¬?˜?—ˆ?Šµ?‹ˆ?‹¤.')
-                    send_msg(chat_id, text + u' ì¢…ëª©(' + result_list[1][count][0] + u')?´ ì¡´ì¬?•©?‹ˆ?‹¤.')
+                    send_msg(chat_id, u'ë™ì¼í•œ ì¢…ëª©ì´ ë°œê²¬ë˜ì—ˆìŠµë‹ˆë‹¤.')
+                    send_msg(chat_id, text + u' ì¢…ëª©(' + result_list[1][count][0] + u')ì´ ì¡´ì¬í•©ë‹ˆë‹¤.')
                     ValInfo = FindInfo(result_list[1][count][0])
-                    send_msg(chat_id, u'PER: ' + ValInfo[0] + u' 12M PER: ' + ValInfo[1] + u' PBR: ' + ValInfo[3] + u' ë°°ë‹¹?ˆ˜?µë¥?: ' + ValInfo[4])
+                    send_msg(chat_id, u'PER: ' + ValInfo[0] + u' 12M PER: ' + ValInfo[1] + u' PBR: ' + ValInfo[3] + u' ë°°ë‹¹ìˆ˜ìµë¥ : ' + ValInfo[4])
                     send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PER_A' + result_list[1][count][0] + '_B_01_06.png')
                     send_photo(chat_id, 'http://comp.fnguide.com/SVO2/chartImg/01_06/PBR_A' + result_list[1][count][0] + '_B_01_06.png')
                     return
@@ -386,20 +378,20 @@ def process_cmds(msg):
     cmd_echo(chat_id, text, reply_to=msg_id)
     return
 
-# ?›¹ ?š”ì²??— ????•œ ?•¸?“¤?Ÿ¬ ? •?˜
-# /me ?š”ì²??‹œ
+# ì›¹ ìš”ì²­ì— ëŒ€í•œ í•¸ë“¤ëŸ¬ ì •ì˜
+# /me ìš”ì²­ì‹œ
 class MeHandler(webapp2.RequestHandler):
     def get(self):
         urlfetch.set_default_fetch_deadline(60)
         self.response.write(json.dumps(json.load(urllib2.urlopen(BASE_URL + 'getMe'))))
 
-# /updates ?š”ì²??‹œ
+# /updates ìš”ì²­ì‹œ
 class GetUpdatesHandler(webapp2.RequestHandler):
     def get(self):
         urlfetch.set_default_fetch_deadline(60)
         self.response.write(json.dumps(json.load(urllib2.urlopen(BASE_URL + 'getUpdates'))))
 
-# /set-wehook ?š”ì²??‹œ
+# /set-wehook ìš”ì²­ì‹œ
 class SetWebhookHandler(webapp2.RequestHandler):
     def get(self):
         urlfetch.set_default_fetch_deadline(60)
@@ -407,7 +399,7 @@ class SetWebhookHandler(webapp2.RequestHandler):
         if url:
             self.response.write(json.dumps(json.load(urllib2.urlopen(BASE_URL + 'setWebhook', urllib.urlencode({'url': url})))))
 
-# /webhook ?š”ì²??‹œ (?…”? ˆê·¸ë¨ ë´? API)
+# /webhook ìš”ì²­ì‹œ (í…”ë ˆê·¸ë¨ ë´‡ API)
 class WebhookHandler(webapp2.RequestHandler):
     def post(self):
         urlfetch.set_default_fetch_deadline(60)
@@ -419,16 +411,16 @@ class WebhookHandler1(webapp2.RequestHandler):
     @cron_method
     def get(self):
         now = time.gmtime(time.time() + 3600 * 9)
-        # ?† ?š”?¼?´?‚˜ ?¼?š”?¼?¸ ê²½ìš°?—” ?•Œë¦? ì¤‘ì??
+        # í† ìš”ì¼ì´ë‚˜ ì¼ìš”ì¼ì¸ ê²½ìš°ì—” ì•Œë¦¼ ì¤‘ì§€
         if now.tm_wday == 5 or now.tm_wday == 6:
             return
         else:
             urlfetch.set_default_fetch_deadline(60)
-            s = '?…Œ?Š¤?Š¸?…?‹ˆ?‹¤.'
+            s = 'í…ŒìŠ¤íŠ¸ì…ë‹ˆë‹¤.'
             broadcast(s)
 
         
-# êµ¬ê?? ?•± ?—”ì§„ì— ?›¹ ?š”ì²? ?•¸?“¤?Ÿ¬ ì§?? •
+# êµ¬ê¸€ ì•± ì—”ì§„ì— ì›¹ ìš”ì²­ í•¸ë“¤ëŸ¬ ì§€ì •
 app = webapp2.WSGIApplication([
     ('/me', MeHandler),
     ('/updates', GetUpdatesHandler),
