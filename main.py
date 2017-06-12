@@ -315,6 +315,14 @@ def cmd_echo(chat_id, text, reply_to):
     """
     send_msg(chat_id, text, reply_to=reply_to)
 
+def cron_method(handler):
+    def check_if_cron(self, *args, **kwargs):
+        if self.request.headers.get('X-AppEngine-Cron') is None:
+            self.error(403)
+        else:
+            return handler(self, *args, **kwargs)
+    return check_if_cron
+
 def process_cmds(msg):
     u"""사용자 메시지를 분석해 봇 명령을 처리
     chat_id: (integer) 채팅 ID
