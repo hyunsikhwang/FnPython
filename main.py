@@ -37,8 +37,15 @@ BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 # 종목명 찾기 API Key
 APIKey = "CJL9jdtz5gsb4z4PpjFpCDjdz/UIk8cFAGgHbJvgLEJxPWLZaTx3wIcBNPkGu/KIKsI1zAy1XtfQJLG0VV0vVg=="
 
+# DART API Key
+DARTAPIKey = "0163d3df4b40f223395ed5e93c38e947b42b9414"
+
 # 채권 수익률 정보 페이지
 url_bondinfo = "http://sbcharts.investing.com/bond_charts/bonds_chart_60.json"
+
+# DART JSON
+DART = 'http://dart.fss.or.kr/api/search.json?auth=' + DARTAPIKey + '&page_set=100'
+
 
 # 봇이 응답할 명령어
 CMD_START     = '/start'
@@ -72,6 +79,15 @@ ST_ECHO, ST_INFO, ST_BOND = range(3)
 
 class CommandStatus(ndb.Model):
     command_status = ndb.IntegerProperty(required=True, indexed=True, default=False,)
+
+
+def CallDART(url):
+    f = urllib2.urlopen(url)
+    page = f.read()
+    f.close()
+    js = json.loads(page)
+    return js
+
 
 def FindInfo(stockcode):
     url_header = 'http://comp.fnguide.com/SVO2/ASP/SVD_main.asp?pGB=1&gicode=A'
@@ -425,7 +441,9 @@ class WebhookHandler1(webapp2.RequestHandler):
             return
         else:
             urlfetch.set_default_fetch_deadline(60)
-            s = u'테스트입니다.'
+            DARTInfo = CallDART(DART)
+            s = str(DARTInfo['total_count'])
+            #s = u'테스트입니다.'
             broadcast(s)
 
         
