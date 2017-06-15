@@ -54,15 +54,17 @@ CMD_HELP      = '/help'
 CMD_BROADCAST = '/broadcast'
 CMD_INFO      = '/info'
 CMD_BOND      = '/bond'
+CMD_REFRESH   = '/refresh'
 CMD_CLOSE     = '/close'
 
 # 봇 사용법 & 메시지
 USAGE = u"""[사용법] 아래 명령어를 메시지로 보내거나 버튼을 누르시면 됩니다.
-/start - (로봇 활성화)
-/stop  - (로봇 비활성화)
-/help  - (이 도움말 보여주기)
-/info  - (정보 조회)
-/bond  - (채권 수익률 조회)
+/start   - (로봇 활성화)
+/stop    - (로봇 비활성화)
+/help    - (이 도움말 보여주기)
+/info    - (정보 조회)
+/bond    - (채권 수익률 조회)
+/refresh - (공시 Refresh)
 """
 MSG_START = u'봇을 시작합니다.'
 MSG_STOP  = u'봇을 정지합니다.'
@@ -70,12 +72,12 @@ MSG_STOP  = u'봇을 정지합니다.'
 # 커스텀 키보드
 CUSTOM_KEYBOARD = [
         [CMD_START,CMD_STOP,CMD_HELP],
-        [CMD_INFO,CMD_BOND]
+        [CMD_INFO,CMD_BOND,CMD_REFRESH]
         ]
 
 USER_KEYBOARD = []
 
-ST_ECHO, ST_INFO, ST_BOND = range(3)
+ST_ECHO, ST_INFO, ST_BOND, ST_REFRESH = range(4)
 
 class CommandStatus(ndb.Model):
     command_status = ndb.IntegerProperty(required=True, indexed=True, default=False,)
@@ -309,6 +311,15 @@ def cmd_bond(chat_id):
         BondRatesInfo = BondRatesInfo + itm[0] + ' - ' + str(itm[1]) + '\n'
     send_msg(chat_id, BondRatesInfo)
 
+def cmd_refresh(chat_id):
+    u"""cmd_refresh: 공시 Refresh
+    chat_id: (integer) 채팅 ID
+    """
+    now = time.gmtime(time.time() + 3600 * 9)
+    DARTInfo = CallDART(DART)
+    s = str(now.tm_year) + '/' + str(now.tm_mon) + '/' + str(now.tm_mday) + ' : ' + str(DARTInfo['total_count'])
+    send_msg(chat_id, s)
+
 def cmd_close(chat_id):
     u"""cmd_close: 종목 조회 모드 종료
     chat_id: (integer) 채팅 ID
@@ -369,6 +380,9 @@ def process_cmds(msg):
         return
     if CMD_BOND == text:
         cmd_bond(chat_id)
+        return
+    if CMD_REFRESH == text:
+        cmd_refresh(chat_id)
         return
     if get_status(chat_id) == ST_INFO:
         result_list = FindCodeAPI(APIKey, text)
@@ -442,7 +456,7 @@ class WebhookHandler1(webapp2.RequestHandler):
         else:
             urlfetch.set_default_fetch_deadline(60)
             DARTInfo = CallDART(DART)
-            s = str(DARTInfo['total_count'])
+            s = str(now.tm_year) + '/' + str(now.tm_mon) + '/' + str(now.tm_mday) + ' : ' + str(DARTInfo['total_count'])
             #s = u'테스트입니다.'
             broadcast(s)
 
