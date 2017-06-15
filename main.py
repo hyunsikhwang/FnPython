@@ -317,7 +317,7 @@ def cmd_refresh(chat_id):
     """
     now = time.gmtime(time.time() + 3600 * 9)
     DARTInfo = CallDART(DART)
-    s = str(now.tm_year) + '/' + str(now.tm_mon) + '/' + str(now.tm_mday) + ' : ' + str(DARTInfo['total_count'])
+    s = "%04d%02d%02d" % (now.tm_year, now.tm_mon, now.tm_mday) + ' : ' + str(DARTInfo['total_count'])
     send_msg(chat_id, s)
 
 def cmd_close(chat_id):
@@ -456,7 +456,7 @@ class WebhookHandler1(webapp2.RequestHandler):
         else:
             urlfetch.set_default_fetch_deadline(60)
             DARTInfo = CallDART(DART)
-            s = str(now.tm_year) + '/' + str(now.tm_mon) + '/' + str(now.tm_mday) + ' : ' + str(DARTInfo['total_count'])
+            s = "%04d%02d%02d" % (now.tm_year, now.tm_mon, now.tm_mday) + ' : ' + str(DARTInfo['total_count'])
             #s = u'테스트입니다.'
             broadcast(s)
 
