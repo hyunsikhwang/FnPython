@@ -347,6 +347,9 @@ def cmd_refresh(chat_id):
     DARTInfo = CallDART(DART)
     s = "%04d%02d%02d" % (now.tm_year, now.tm_mon, now.tm_mday) + ' : ' + str(DARTInfo['total_count'])
     send_msg(chat_id, s)
+    dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
+    countint = DARTInfo['total_count']
+    set_LastSaved(chat_id, dateint, countint)
 
 def cmd_close(chat_id):
     u"""cmd_close: 종목 조회 모드 종료
