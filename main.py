@@ -166,11 +166,7 @@ def CollectBondRates(url):
 class EnableStatus(ndb.Model):
     enabled = ndb.BooleanProperty(required=True, indexed=True, default=False,)
 
-class ChatId(ndb.Model):
-    name = ndb.StringProperty()
-
 class LastSaved(ndb.Model):
-    userid = ndb.KeyProperty(kind=ChatId)
     LastDate = ndb.IntegerProperty(required=True, indexed=True, default=False,)
     LastNum = ndb.IntegerProperty(required=True, indexed=True, default=False,)
 
