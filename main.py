@@ -166,6 +166,34 @@ def CollectBondRates(url):
 class EnableStatus(ndb.Model):
     enabled = ndb.BooleanProperty(required=True, indexed=True, default=False,)
 
+class LastSaved(ndb.Model):
+    userid = ndb.KeyProperty(kind=ChatId)
+    LastDate = ndb.IntegerProperty(required=True, indexed=True, default=False,)
+    LastNum = ndb.IntegerProperty(required=True, indexed=True, default=False,)
+
+def set_LastSaved(chat_id, LastDate, LastNum):
+    u"""set_LastSaved: 최종 조회정보 저장
+    chat_id:    (integer) 채팅 ID
+    LastDate:   (integer) 최종 저장 날짜
+    LastNum:    (integer) 최종 저장 일련번호
+    """
+    ls = LastSaved.get_or_insert(str(chat_id))
+    ls.LastDate = LastDate
+    ls.LastNum = LastNum
+    ls.put()
+
+def get_LastSaved(chat_id):
+    u"""get_LastSaved: 최종 조회정보 반환
+    return: (boolean)
+    """
+    ls = LastSaved.get_by_id(str(chat_id))
+    if ls:
+        LastInfo = []
+        LastInfo = [LastDate], str(LastNum)]
+        return LastInfo
+    return False
+
+
 def set_enabled(chat_id, enabled):
     u"""set_enabled: 봇 활성화/비활성화 상태 변경
     chat_id:    (integer) 봇을 활성화/비활성화할 채팅 ID
@@ -459,6 +487,9 @@ class WebhookHandler1(webapp2.RequestHandler):
             s = "%04d%02d%02d" % (now.tm_year, now.tm_mon, now.tm_mday) + ' : ' + str(DARTInfo['total_count'])
             #s = u'테스트입니다.'
             broadcast(s)
+            dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
+            countint = DARTInfo['total_count']
+            set_LastSaved(chat_id, dateint, countint)
 
         
 # 구글 앱 엔진에 웹 요청 핸들러 지정
