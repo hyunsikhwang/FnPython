@@ -491,7 +491,8 @@ class WebhookHandler1(webapp2.RequestHandler):
             broadcast(s)
             dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
             countint = DARTInfo['total_count']
-            set_LastSaved(chat_id, dateint, countint)
+            for chat in get_enabled_chats():
+                set_LastSaved(chat.key.string_id(), dateint, countint)
 
         
 # 구글 앱 엔진에 웹 요청 핸들러 지정
