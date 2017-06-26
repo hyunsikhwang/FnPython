@@ -345,7 +345,7 @@ def cmd_refresh(chat_id):
     # NDB 에 저장된 마지막 저장 날짜와 리스트 번호 읽어오기
     LastInfo = get_LastSaved(chat_id)
     s = "%08d : %4d" % (LastInfo[0], LastInfo[1])
-    send_msg(s)
+    send_msg(chat_id, s)
 
     # DART Info (API) 읽어오기
     now = time.gmtime(time.time() + 3600 * 9)
