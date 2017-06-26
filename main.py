@@ -188,7 +188,7 @@ def get_LastSaved(chat_id):
     ls = LastSaved.get_by_id(str(chat_id))
     if ls:
         LastInfo = []
-        LastInfo = [LastDate, LastNum]
+        LastInfo = [ls.LastDate, ls.LastNum]
         return LastInfo
     return False
 
