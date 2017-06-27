@@ -353,20 +353,12 @@ def cmd_refresh(chat_id):
     s = "Curr %04d%02d%02d : %4d" % (now.tm_year, now.tm_mon, now.tm_mday, DARTInfo['total_count'])
     send_msg(chat_id, s)
     i = 0
-    s = DARTInfo['list'][i]['crp_cls']
-    send_msg(chat_id, s)
-    s = DARTInfo['list'][i]['crp_nm']
-    send_msg(chat_id, s)
-    s = DARTInfo['list'][i]['crp_cd']
-    send_msg(chat_id, s)
-    s = DARTInfo['list'][i]['rpt_nm']
-    send_msg(chat_id, s)
-#    for i in range(len(DARTInfo['list'])):
-#        if DARTInfo['list'][i]['crp_cls'] == "K" or DARTInfo['list'][i]['crp_cls'] == "Y":
-#            s = u'%03d 분류 : %s\n' + u'종목명 : %s\n'+ u'종목코드 : %s\n'+ u'보고서명 : %s\n' % \
-#                (i, DARTInfo['list'][i]['crp_cls'], DARTInfo['list'][i]['crp_nm'], DARTInfo['list'][i]['crp_cd'], DARTInfo['list'][i]['rpt_nm'])
-#            send_msg(chat_id, s)
-#            i = i + 1
+    for el in DARTInfo['list']:
+        if DARTInfo['list'][i]['crp_cls'] == "K" or DARTInfo['list'][i]['crp_cls'] == "Y":
+            s = u'%03d 분류 : %s\n' + u'종목명 : %s\n'+ u'종목코드 : %s\n'+ u'보고서명 : %s\n' % \
+                (i, DARTInfo['list'][i]['crp_cls'], DARTInfo['list'][i]['crp_nm'], DARTInfo['list'][i]['crp_cd'], DARTInfo['list'][i]['rpt_nm'])
+            send_msg(chat_id, s)
+            i = i + 1
 
     dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
     countint = DARTInfo['total_count']
