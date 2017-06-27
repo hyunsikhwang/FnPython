@@ -357,7 +357,7 @@ def cmd_refresh(chat_id):
         if DARTInfo['list'][i]['crp_cls'] == "K" or DARTInfo['list'][i]['crp_cls'] == "Y":
             s = u'분류 : %s\n' + u'종목명 : %s\n'+ u'종목코드 : %s\n'+ u'보고서명 : %s\n' % \
                 (DARTInfo['list'][i]['crp_cls'], DARTInfo['list'][i]['crp_nm'], DARTInfo['list'][i]['crp_cd'], DARTInfo['list'][i]['rpt_nm'])
-        send_msg(chat_id, s)
+            send_msg(chat_id, s)
 
     dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
     countint = DARTInfo['total_count']
