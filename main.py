@@ -355,6 +355,12 @@ def cmd_refresh(chat_id):
     i = 0
     s = DARTInfo['list'][i]['crp_cls']
     send_msg(chat_id, s)
+    s = DARTInfo['list'][i]['crp_nm']
+    send_msg(chat_id, s)
+    s = DARTInfo['list'][i]['crp_cd']
+    send_msg(chat_id, s)
+    s = DARTInfo['list'][i]['rpt_nm']
+    send_msg(chat_id, s)
 #    for i in range(len(DARTInfo['list'])):
 #        if DARTInfo['list'][i]['crp_cls'] == "K" or DARTInfo['list'][i]['crp_cls'] == "Y":
 #            s = u'%03d 분류 : %s\n' + u'종목명 : %s\n'+ u'종목코드 : %s\n'+ u'보고서명 : %s\n' % \
