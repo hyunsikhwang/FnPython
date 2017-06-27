@@ -362,7 +362,7 @@ def cmd_refresh(chat_id):
 #                (i, DARTInfo['list'][i]['crp_cls'], DARTInfo['list'][i]['crp_nm'], DARTInfo['list'][i]['crp_cd'], DARTInfo['list'][i]['rpt_nm'])
 #            send_msg(chat_id, s)
         if i <= numoflist:
-            s = "%03d / %03d :" % (i, numoflist) + el['crp_nm']
+            s = "%03d / %03d :" % (i, numoflist) + "\n" + el['crp_cls'] + "\n" + el['crp_nm'] + "\n" + el['crp_cd'] + "\n" + el['rpt_nm']
             i = i + 1
             send_msg(chat_id, s)
 
