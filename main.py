@@ -46,6 +46,7 @@ url_bondinfo = "http://sbcharts.investing.com/bond_charts/bonds_chart_60.json"
 # DART JSON
 DART = 'http://dart.fss.or.kr/api/search.json?auth=' + DARTAPIKey + '&page_set=100'
 
+MarketType = {'Y':u'유가증권', 'K':u'코스닥', 'E': u'기타'}
 
 # 봇이 응답할 명령어
 CMD_START     = '/start'
@@ -366,7 +367,7 @@ def cmd_refresh(chat_id):
             i = i + 1
             if el['crp_cls'] == "K" or el['crp_cls'] == "Y":
                 j = j + 1
-                s = "[%03d]: " % (j) + "\n" + el['crp_cls'] + "\n" + el['crp_nm'] + "\n" + el['crp_cd'] + "\n" + el['rpt_nm']
+                s = "[%03d]: " % (j) + "\t" + MarketType[el['crp_cls']] + "\t" + el['crp_nm'] + "\t" + el['crp_cd'] + "\t" + el['rpt_nm']
                 send_msg(chat_id, s)
 
     dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
