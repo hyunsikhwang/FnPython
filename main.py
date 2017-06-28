@@ -367,7 +367,8 @@ def cmd_refresh(chat_id):
             i = i + 1
             if el['crp_cls'] == "K" or el['crp_cls'] == "Y":
                 j = j + 1
-                s = "[%03d]: " % (j) + "\t" + MarketType[el['crp_cls']] + "\t" + el['crp_nm'] + "\t" + el['crp_cd'] + "\t" + el['rpt_nm']
+                s = "[%03d]: " % (j) + "\t" + MarketType[el['crp_cls']] + "\t" + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
+                  + "\t" + "http://dart.fss.or.kr/dsaf001/main.do?rcpNo=" + el['rcpNo']
                 send_msg(chat_id, s)
 
     dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
