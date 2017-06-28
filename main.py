@@ -356,15 +356,18 @@ def cmd_refresh(chat_id):
     numoflist = DARTInfo['total_count'] - LastInfo[1]
 
     i = 0
+    j = 0
     for el in DARTInfo['list']:
 #        if DARTInfo['list'][i]['crp_cls'] == "K" or DARTInfo['list'][i]['crp_cls'] == "Y":
 #            s = u'%03d 분류 : %s\n' + u'종목명 : %s\n'+ u'종목코드 : %s\n'+ u'보고서명 : %s\n' % \
 #                (i, DARTInfo['list'][i]['crp_cls'], DARTInfo['list'][i]['crp_nm'], DARTInfo['list'][i]['crp_cd'], DARTInfo['list'][i]['rpt_nm'])
 #            send_msg(chat_id, s)
         if i <= numoflist:
-            s = "%03d / %03d :" % (i, numoflist) + "\n" + el['crp_cls'] + "\n" + el['crp_nm'] + "\n" + el['crp_cd'] + "\n" + el['rpt_nm']
             i = i + 1
-            send_msg(chat_id, s)
+            if el['crp_cls'] == "K" or el['crp_cls'] == "Y":
+                j = j + 1
+                s = "[%03d]: " % (j) + "\n" + el['crp_cls'] + "\n" + el['crp_nm'] + "\n" + el['crp_cd'] + "\n" + el['rpt_nm']
+                send_msg(chat_id, s)
 
     dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
     countint = DARTInfo['total_count']
