@@ -359,15 +359,11 @@ def cmd_refresh(chat_id):
     i = 0
     j = 0
     for el in DARTInfo['list']:
-#        if DARTInfo['list'][i]['crp_cls'] == "K" or DARTInfo['list'][i]['crp_cls'] == "Y":
-#            s = u'%03d 분류 : %s\n' + u'종목명 : %s\n'+ u'종목코드 : %s\n'+ u'보고서명 : %s\n' % \
-#                (i, DARTInfo['list'][i]['crp_cls'], DARTInfo['list'][i]['crp_nm'], DARTInfo['list'][i]['crp_cd'], DARTInfo['list'][i]['rpt_nm'])
-#            send_msg(chat_id, s)
         if i <= numoflist:
             i = i + 1
             if el['crp_cls'] == "K" or el['crp_cls'] == "Y":
                 j = j + 1
-                s = "[%03d]: " % (j) + "\t" + MarketType[el['crp_cls']] + "\t" + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
+                s = "[%03d] " % (j) + "\t" + MarketType[el['crp_cls']] + "\t" + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
                   + "\t" + "http://dart.fss.or.kr/dsaf001/main.do?rcpNo=" + el['rcp_no']
                 send_msg(chat_id, s)
 
@@ -512,8 +508,21 @@ class WebhookHandler1(webapp2.RequestHandler):
             urlfetch.set_default_fetch_deadline(60)
             DARTInfo = CallDART(DART)
             s = "%04d%02d%02d" % (now.tm_year, now.tm_mon, now.tm_mday) + ' : ' + str(DARTInfo['total_count'])
-            #s = u'테스트입니다.'
             broadcast(s)
+
+            numoflist = DARTInfo['total_count'] - LastInfo[1]
+
+            i = 0
+            j = 0
+            for el in DARTInfo['list']:
+                if i <= numoflist:
+                    i = i + 1
+                    if el['crp_cls'] == "K" or el['crp_cls'] == "Y":
+                        j = j + 1
+                        s = "[%03d] " % (j) + "\t" + MarketType[el['crp_cls']] + "\t" + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
+                        + "\t" + "http://dart.fss.or.kr/dsaf001/main.do?rcpNo=" + el['rcp_no']
+                        broadcast(s)
+
             dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
             countint = DARTInfo['total_count']
             for chat in get_enabled_chats():
