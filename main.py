@@ -351,10 +351,14 @@ def cmd_refresh(chat_id):
     # DART Info (API) 읽어오기
     now = time.gmtime(time.time() + 3600 * 9)
     DARTInfo = CallDART(DART)
+    CurrDate = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
     s = "Curr %04d%02d%02d : %4d" % (now.tm_year, now.tm_mon, now.tm_mday, DARTInfo['total_count'])
     send_msg(chat_id, s)
 
-    numoflist = DARTInfo['total_count'] - LastInfo[1]
+    if LastInfo[0] == CurrDate:
+        numoflist = DARTInfo['total_count'] - LastInfo[1]
+    else:
+        numoflist = DARTInfo['total_count']
 
     i = 0
     j = 0
@@ -506,6 +510,7 @@ class WebhookHandler1(webapp2.RequestHandler):
             return
         else:
             urlfetch.set_default_fetch_deadline(60)
+
             DARTInfo = CallDART(DART)
             s = "%04d%02d%02d" % (now.tm_year, now.tm_mon, now.tm_mday) + ' : ' + str(DARTInfo['total_count'])
             broadcast(s)
@@ -513,7 +518,7 @@ class WebhookHandler1(webapp2.RequestHandler):
             numoflist = DARTInfo['total_count'] - LastInfo[1]
 
             i = 0
-            j = 0
+            j = 0   
             for el in DARTInfo['list']:
                 if i <= numoflist:
                     i = i + 1
