@@ -367,8 +367,8 @@ def cmd_refresh(chat_id):
             i = i + 1
             if el['crp_cls'] == "K" or el['crp_cls'] == "Y":
                 j = j + 1
-                s = "[%03d] " % (j) + "\t" + MarketType[el['crp_cls']] + "\t" + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
-                  + "\t" + "http://dart.fss.or.kr/dsaf001/main.do?rcpNo=" + el['rcp_no']
+                s = "[%03d] " % (j) + " (" + MarketType[el['crp_cls']] + ") " + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
+                  + "\n" + "http://dart.fss.or.kr/dsaf001/main.do?rcpNo=" + el['rcp_no']
                 send_msg(chat_id, s)
 
     dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
@@ -504,6 +504,7 @@ class WebhookHandler(webapp2.RequestHandler):
 class WebhookHandler1(webapp2.RequestHandler):
     @cron_method
     def get(self):
+
         now = time.gmtime(time.time() + 3600 * 9)
         # 토요일이나 일요일인 경우엔 알림 중지
         if now.tm_wday == 5 or now.tm_wday == 6:
@@ -511,11 +512,21 @@ class WebhookHandler1(webapp2.RequestHandler):
         else:
             urlfetch.set_default_fetch_deadline(60)
 
-            DARTInfo = CallDART(DART)
-            s = "%04d%02d%02d" % (now.tm_year, now.tm_mon, now.tm_mday) + ' : ' + str(DARTInfo['total_count'])
+            # NDB 에 "broadcast" id 로 저장된 마지막 저장 날짜와 리스트 번호 읽어오기
+            LastInfo = get_LastSaved('broadcast')
+            s = "Prev %08d : %4d" % (LastInfo[0], LastInfo[1])
             broadcast(s)
 
-            numoflist = DARTInfo['total_count'] - LastInfo[1]
+            # DART Info (API) 읽어오기
+            DARTInfo = CallDART(DART)
+            CurrDate = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
+            s = "Curr %04d%02d%02d : %4d" % (now.tm_year, now.tm_mon, now.tm_mday, DARTInfo['total_count'])
+            broadcast(s)
+
+            if LastInfo[0] == CurrDate:
+                numoflist = DARTInfo['total_count'] - LastInfo[1]
+            else:
+                numoflist = DARTInfo['total_count']
 
             i = 0
             j = 0   
@@ -524,14 +535,14 @@ class WebhookHandler1(webapp2.RequestHandler):
                     i = i + 1
                     if el['crp_cls'] == "K" or el['crp_cls'] == "Y":
                         j = j + 1
-                        s = "[%03d] " % (j) + "\t" + MarketType[el['crp_cls']] + "\t" + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
+                        s = "[%03d] " % (j) + " (" + MarketType[el['crp_cls']] + ") " + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
                         + "\t" + "http://dart.fss.or.kr/dsaf001/main.do?rcpNo=" + el['rcp_no']
                         broadcast(s)
 
             dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
             countint = DARTInfo['total_count']
             for chat in get_enabled_chats():
-                set_LastSaved(chat.key.string_id(), dateint, countint)
+                set_LastSaved('broadcast', dateint, countint)
 
         
 # 구글 앱 엔진에 웹 요청 핸들러 지정
