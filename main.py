@@ -514,7 +514,7 @@ class WebhookHandler1(webapp2.RequestHandler):
 
             # NDB 에 "broadcast" id 로 저장된 마지막 저장 날짜와 리스트 번호 읽어오기
             LastInfo = get_LastSaved('broadcast')
-            if LastInfo[0] is not None:
+            if LastInfo is not False:
                 s = "Prev %08d : %4d" % (LastInfo[0], LastInfo[1])
                 broadcast(s)
 
