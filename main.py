@@ -524,8 +524,11 @@ class WebhookHandler1(webapp2.RequestHandler):
             s = "Curr %04d%02d%02d : %4d" % (now.tm_year, now.tm_mon, now.tm_mday, DARTInfo['total_count'])
             broadcast(s)
 
-            if LastInfo[0] == CurrDate:
-                numoflist = DARTInfo['total_count'] - LastInfo[1]
+            if LastInfo is not False:
+                if LastInfo[0] == CurrDate:
+                    numoflist = DARTInfo['total_count'] - LastInfo[1]
+                else:
+                    numoflist = DARTInfo['total_count']
             else:
                 numoflist = DARTInfo['total_count']
 
