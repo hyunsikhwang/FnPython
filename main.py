@@ -513,7 +513,7 @@ class WebhookHandler1(webapp2.RequestHandler):
             urlfetch.set_default_fetch_deadline(60)
 
             # NDB 에 "broadcast" id 로 저장된 마지막 저장 날짜와 리스트 번호 읽어오기
-            LastInfo = get_LastSaved('broadcast')
+            LastInfo = get_LastSaved(0)
             if LastInfo is not False:
                 s = "Prev %08d : %4d" % (LastInfo[0], LastInfo[1])
                 broadcast(s)
@@ -543,7 +543,7 @@ class WebhookHandler1(webapp2.RequestHandler):
             dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
             countint = DARTInfo['total_count']
             for chat in get_enabled_chats():
-                set_LastSaved('broadcast', dateint, countint)
+                set_LastSaved(0, dateint, countint)
 
         
 # 구글 앱 엔진에 웹 요청 핸들러 지정
