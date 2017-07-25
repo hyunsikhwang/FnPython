@@ -533,9 +533,13 @@ class WebhookHandler1(webapp2.RequestHandler):
                 numoflist = DARTInfo['total_count']
 
             i = 0
-            j = 0   
+            j = 0
+            if numoflist > 0:
+                DARTInfo['list'][:numoflist-1]
+                DARTInfo['list'].reverse()
+            
             for el in DARTInfo['list']:
-                if i <= numoflist:
+                if i < numoflist:
                     i = i + 1
                     if el['crp_cls'] == "K" or el['crp_cls'] == "Y":
                         j = j + 1
