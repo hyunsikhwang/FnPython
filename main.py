@@ -516,13 +516,13 @@ class WebhookHandler1(webapp2.RequestHandler):
             LastInfo = get_LastSaved(0)
             if LastInfo is not False:
                 s = "Prev %08d : %4d" % (LastInfo[0], LastInfo[1])
-                broadcast(s)
+                # broadcast(s)
 
             # DART Info (API) 읽어오기
             DARTInfo = CallDART(DART)
             CurrDate = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
             s = "Curr %04d%02d%02d : %4d" % (now.tm_year, now.tm_mon, now.tm_mday, DARTInfo['total_count'])
-            broadcast(s)
+            # broadcast(s)
 
             if LastInfo is not False:
                 if LastInfo[0] == CurrDate:
@@ -543,7 +543,7 @@ class WebhookHandler1(webapp2.RequestHandler):
                     i = i + 1
                     if el['crp_cls'] == "K" or el['crp_cls'] == "Y":
                         j = j + 1
-                        s = " (" + MarketType[el['crp_cls']] + ") " + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
+                        s = "(" + MarketType[el['crp_cls']] + ") " + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
                         + "\t" + "http://dart.fss.or.kr/dsaf001/main.do?rcpNo=" + el['rcp_no']
                         broadcast(s)
 
