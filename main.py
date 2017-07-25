@@ -543,7 +543,7 @@ class WebhookHandler1(webapp2.RequestHandler):
                     i = i + 1
                     if el['crp_cls'] == "K" or el['crp_cls'] == "Y":
                         j = j + 1
-                        s = "[%03d] " % (j) + " (" + MarketType[el['crp_cls']] + ") " + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
+                        s = " (" + MarketType[el['crp_cls']] + ") " + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
                         + "\t" + "http://dart.fss.or.kr/dsaf001/main.do?rcpNo=" + el['rcp_no']
                         broadcast(s)
 
