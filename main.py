@@ -362,12 +362,15 @@ def cmd_refresh(chat_id):
 
     i = 0
     j = 0
+    if numoflist > 0:
+        DARTInfo['list'][:numoflist-1]
+        DARTInfo['list'].reverse()
     for el in DARTInfo['list']:
-        if i <= numoflist:
+        if i < numoflist:
             i = i + 1
             if el['crp_cls'] == "K" or el['crp_cls'] == "Y":
                 j = j + 1
-                s = "[%03d] " % (j) + " (" + MarketType[el['crp_cls']] + ") " + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
+                s = "(" + MarketType[el['crp_cls']] + ") " + el['crp_nm'] + "(" + el['crp_cd'] + ") " + el['rpt_nm'] \
                   + "\n" + "http://dart.fss.or.kr/dsaf001/main.do?rcpNo=" + el['rcp_no']
                 send_msg(chat_id, s)
 
