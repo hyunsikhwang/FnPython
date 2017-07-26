@@ -523,6 +523,9 @@ class WebhookHandler1(webapp2.RequestHandler):
 
             # DART Info (API) 읽어오기
             DARTInfo = CallDART(DART)
+
+            # 이 부분에서 flr_nm = "금융감독원" 인 항목에 대해서 리스트에서 제거 필요
+
             CurrDate = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
             s = "Curr %04d%02d%02d : %4d" % (now.tm_year, now.tm_mon, now.tm_mday, DARTInfo['total_count'])
             # broadcast(s)
