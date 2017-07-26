@@ -523,17 +523,27 @@ class WebhookHandler1(webapp2.RequestHandler):
 
             # DART Info (API) 읽어오기
             DARTInfo = CallDART(DART)
+
+            # 유가증권/코스닥 공시만 남기는 필터링
+            i = 0
+            for el in DARTInfo['list']:
+                if el['crp_cls'] != "K" and el['crp_cls'] != "Y":
+                    del DARTInfo['list'][i]
+                else:
+                    i = i + 1
+
+            CurrCount = len(DARTInfo['list'])
             CurrDate = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
-            s = "Curr %04d%02d%02d : %4d" % (now.tm_year, now.tm_mon, now.tm_mday, DARTInfo['total_count'])
+            s = "Curr %04d%02d%02d : %4d" % (now.tm_year, now.tm_mon, now.tm_mday, CurrCount)
             # broadcast(s)
 
             if LastInfo is not False:
                 if LastInfo[0] == CurrDate:
-                    numoflist = DARTInfo['total_count'] - LastInfo[1]
+                    numoflist = CurrCount - LastInfo[1]
                 else:
-                    numoflist = DARTInfo['total_count']
+                    numoflist = CurrCount
             else:
-                numoflist = DARTInfo['total_count']
+                numoflist = CurrCount
 
             i = 0
             j = 0
@@ -551,7 +561,7 @@ class WebhookHandler1(webapp2.RequestHandler):
                         broadcast(s)
 
             dateint = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
-            countint = DARTInfo['total_count']
+            countint = CurrCount
             for chat in get_enabled_chats():
                 set_LastSaved(0, dateint, countint)
 
