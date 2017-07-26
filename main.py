@@ -524,6 +524,7 @@ class WebhookHandler1(webapp2.RequestHandler):
             # DART Info (API) 읽어오기
             DARTInfo = CallDART(DART)
 
+<<<<<<< HEAD
             # 유가증권/코스닥 공시만 남기는 필터링
             i = 0
             for el in DARTInfo['list']:
@@ -533,6 +534,10 @@ class WebhookHandler1(webapp2.RequestHandler):
                     i = i + 1
 
             CurrCount = len(DARTInfo['list'])
+=======
+            # 이 부분에서 flr_nm = "금융감독원" 인 항목에 대해서 리스트에서 제거 필요
+
+>>>>>>> master
             CurrDate = now.tm_year * 10000 + now.tm_mon * 100 + now.tm_mday
             s = "Curr %04d%02d%02d : %4d" % (now.tm_year, now.tm_mon, now.tm_mday, CurrCount)
             # broadcast(s)
