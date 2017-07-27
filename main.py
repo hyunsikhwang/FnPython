@@ -551,7 +551,7 @@ class WebhookHandler1(webapp2.RequestHandler):
             j = 0
             if numoflist > 0:
                 DARTInfo['list'][:numoflist-1]
-                DARTInfo['list'].reverse()
+                #DARTInfo['list'].reverse()
             
             for el in DARTInfo['list']:
                 if i < numoflist:
