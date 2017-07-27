@@ -528,7 +528,7 @@ class WebhookHandler1(webapp2.RequestHandler):
             i = 0
             for el in DARTInfo['list']:
                 if el['crp_cls'] != "K" and el['crp_cls'] != "Y":
-                    del DARTInfo['list'][i]
+                    DARTInfo['list'].pop(i)
                 else:
                     i = i + 1
 
