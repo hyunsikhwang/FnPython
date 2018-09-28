@@ -35,7 +35,7 @@ TOKEN = '303352490:AAGLVFQbnFyviIelWVBynx98JGqd_GoVRzQ'
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 
 # 종목명 찾기 API Key
-APIKey = "CJL9jdtz5gsb4z4PpjFpCDjdz/UIk8cFAGgHbJvgLEJxPWLZaTx3wIcBNPkGu/KIKsI1zAy1XtfQJLG0VV0vVg=="
+APIKey = "VYrRFsJTI42yMy9v7HHbDhRduUEdM%2FFNveB1Y9Rhv1YpkAjvfgn7uJFv2vC3XYed7gtjOJ4iB6ikIeelxhFZGw=="
 
 # DART API Key
 DARTAPIKey = "0163d3df4b40f223395ed5e93c38e947b42b9414"
@@ -115,7 +115,7 @@ def FindInfo(stockcode):
 
 
 def FindCodeAPI(APIKey, stock_name):
-    url = 'http://api.seibro.or.kr/openapi/service/StockSvc/getStkIsinByNm'
+    url = 'http://api.seibro.or.kr/openapi/service/StockSvc/getStkIsinByNmN1'
     queryParams = '?' + urlencode({ quote_plus('ServiceKey') : APIKey, quote_plus('secnNm') : stock_name.encode('utf-8'), quote_plus('pageNo') : '1', quote_plus(u'numOfRows') : '500' })
 
     request = Request(url + queryParams)
