@@ -35,7 +35,7 @@ TOKEN = '303352490:AAGLVFQbnFyviIelWVBynx98JGqd_GoVRzQ'
 BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/'
 
 # 종목명 찾기 API Key
-APIKey = "VYrRFsJTI42yMy9v7HHbDhRduUEdM%2FFNveB1Y9Rhv1YpkAjvfgn7uJFv2vC3XYed7gtjOJ4iB6ikIeelxhFZGw=="
+APIKey = "VYrRFsJTI42yMy9v7HHbDhRduUEdM/FNveB1Y9Rhv1YpkAjvfgn7uJFv2vC3XYed7gtjOJ4iB6ikIeelxhFZGw=="
 
 # DART API Key
 DARTAPIKey = "0163d3df4b40f223395ed5e93c38e947b42b9414"
@@ -135,11 +135,11 @@ def FindCodeAPI(APIKey, stock_name):
 
     for li in soup.findAll('item'):
         i = i + 1
-        retlist1.append([li.korSecnNm.string])
-        if li.shotnIsin == None:
+        retlist1.append([li.korsecnnm.string])
+        if li.shotnisin == None:
             retlist2.append(['000000'])
         else:
-            retlist2.append([li.shotnIsin.string])
+            retlist2.append([li.shotnisin.string])
 
     retlist = [retlist1, retlist2]
     return retlist
